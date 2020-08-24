@@ -1,0 +1,20 @@
+version: '3'
+services:
+  database:
+    image: mariadb:10.2
+    container_name: database
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: xmldatabase
+      MYSQL_USER: stipe
+      MYSQL_PASSWORD: stipe123
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - xml-data:/var/lib/mysql
+    networks:
+      - xml-net
+networks:
+  xml-net:
+volumes:
+  xml-data:

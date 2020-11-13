@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
-@Entity(name = "user_authority")
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -32,7 +32,7 @@ public class Authority implements Serializable {
     @JoinTable(
             name = "authorities_permissions",
             joinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"),
-            inverseJoinColumns =  @JoinColumn(name = "permission_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
     private Set<Permission> permissions;
 
 }

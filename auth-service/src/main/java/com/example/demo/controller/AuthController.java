@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth-service")
+@RequestMapping("/")
 public class AuthController {
 
     private final TokenUtils _tokenUtils;
@@ -20,5 +20,10 @@ public class AuthController {
     @GetMapping("/verify")
     public String verify(@RequestHeader("Auth-Token") String token) throws NotFoundException {
         return _tokenUtils.getUsernameFromToken(token);
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "CAOOOO";
     }
 }

@@ -1,15 +1,20 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.dto.request.LoginRequest;
+import com.example.demo.dto.request.RegistrationRequest;
 import com.example.demo.dto.response.UserResponse;
+import com.example.demo.entity.Authority;
 import com.example.demo.entity.MyUserDetails;
+import com.example.demo.entity.SimpleUser;
 import com.example.demo.entity.User;
 import com.example.demo.repository.IAuthorityRepository;
+import com.example.demo.repository.ISimpleUserRepository;
 import com.example.demo.repository.IUserRepository;
 import com.example.demo.security.TokenUtils;
 import com.example.demo.services.IAuthService;
 import com.example.demo.util.GeneralException;
 import com.example.demo.util.enums.RequestStatus;
+import com.example.demo.util.enums.UserRoles;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,6 +25,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class AuthService implements IAuthService {
@@ -34,14 +43,17 @@ public class AuthService implements IAuthService {
 
     private final IAuthorityRepository _authorityRepository;
 
+    private final ISimpleUserRepository _simpleUserRepository;
 
 
-    public AuthService(TokenUtils tokenUtils, IUserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, IAuthorityRepository authorityRepository) {
+
+    public AuthService(TokenUtils tokenUtils, IUserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, IAuthorityRepository authorityRepository, ISimpleUserRepository simpleUserRepository) {
         _tokenUtils = tokenUtils;
         _userRepository = userRepository;
         _passwordEncoder = passwordEncoder;
         _authenticationManager = authenticationManager;
         _authorityRepository = authorityRepository;
+        _simpleUserRepository = simpleUserRepository;
     }
 
     @Override
@@ -99,6 +111,43 @@ public class AuthService implements IAuthService {
         userResponse.setTokenExpiresIn(expiresIn);
 
         return userResponse;
+    }
+
+    @Override
+    public UserResponse registerSimpleUser(RegistrationRequest request) {
+        if(!request.getPassword().equals(request.getRePassword())){
+            throw new GeneralException("Passwords do not match.", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = new User();
+        SimpleUser simpleUser = new SimpleUser();
+        user.setUsername(request.getUsername());
+        user.setPassword(_passwordEncoder.encode(request.getPassword()));
+        user.setUserRole(UserRoles.SIMPLE_USER);
+        user.setDeleted(false);
+        user.setHasSignedIn(false);
+        List<Authority> authorities = new ArrayList<>();
+        authorities.add(_authorityRepository.findOneByName("ROLE_SIMPLE_USER"));
+        authorities.add(_authorityRepository.findOneByName("ROLE_RENT_USER"));
+        authorities.add(_authorityRepository.findOneByName("ROLE_REQUEST"));       // treba da se dodaje kada se rentira
+        authorities.add(_authorityRepository.findOneByName("ROLE_COMMENT_USER"));  // treba da se dodaje kada se rentira
+        authorities.add(_authorityRepository.findOneByName("ROLE_MESSAGE_USER"));  // treba da se dodaje kada se rentira
+        authorities.add(_authorityRepository.findOneByName("ROLE_REVIEWER_USER")); // treba da se dodaje kada se rentira
+        authorities.add(_authorityRepository.findOneByName("ROLE_AD_USER"));       // samo zbog toga sto moze da postavlja oglas
+        user.setAuthorities(new HashSet<>(authorities));
+
+        simpleUser.setAddress(request.getCountry()+", "+request.getCity()+","+request.getAddress());
+        simpleUser.setFirstName(request.getFirstName());
+        simpleUser.setLastName(request.getLastName());
+        simpleUser.setSsn(request.getSsn());
+        simpleUser.setRequestStatus(RequestStatus.PENDING);
+        SimpleUser savedSimpleUser = _simpleUserRepository.save(simpleUser);
+        savedSimpleUser.setUser(user);
+        user.setSimpleUser(savedSimpleUser);
+        User savedUser = _userRepository.save(user);
+
+        return mapUserToUserResponse(savedUser);
+
     }
 
     private UserResponse mapUserToUserResponse(User user) {

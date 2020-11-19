@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.request.LoginRequest;
+import com.example.demo.dto.request.RegistrationRequest;
 import com.example.demo.dto.response.UserResponse;
 import com.example.demo.security.TokenUtils;
 import com.example.demo.services.IAuthService;
@@ -41,5 +42,10 @@ public class AuthController {
     @PutMapping("/login")
     public UserResponse login(@RequestBody LoginRequest request){
         return _authService.login(request);
+    }
+
+    @PostMapping("/register-simple-user")
+    public UserResponse registerSimpleUser(@RequestBody RegistrationRequest request){
+        return _authService.registerSimpleUser(request);
     }
 }

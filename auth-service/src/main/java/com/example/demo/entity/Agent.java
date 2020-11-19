@@ -11,7 +11,12 @@ import java.util.*;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Agent extends BaseEntity {
+public class Agent{
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

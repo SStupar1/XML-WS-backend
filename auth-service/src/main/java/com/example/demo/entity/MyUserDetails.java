@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class MyUserDetails implements UserDetails {
 
-    private UUID id;
+    private Long id;
 
     private String username;
 
@@ -40,7 +40,7 @@ public class MyUserDetails implements UserDetails {
         this.authorities = new ArrayList<>();
     }
 
-    public MyUserDetails(UUID id, String username, String password,
+    public MyUserDetails(Long id, String username, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -48,11 +48,11 @@ public class MyUserDetails implements UserDetails {
         this.authorities = authorities;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface IUserRepository extends JpaRepository<User, UUID> {
+public interface IUserRepository extends JpaRepository<User, Long> {
 
-    User findOneById(UUID id);
+    User findOneById(Long id);
 
     User findOneByUsername(String username);
 

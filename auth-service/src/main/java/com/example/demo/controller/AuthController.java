@@ -1,20 +1,26 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.LoginRequest;
+import com.example.demo.dto.response.UserResponse;
 import com.example.demo.security.TokenUtils;
+import com.example.demo.services.IAuthService;
 import javassist.NotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final TokenUtils _tokenUtils;
 
-    public AuthController(TokenUtils tokenUtils) {
+    private final IAuthService _authService;
+
+    public AuthController(TokenUtils tokenUtils, IAuthService authService) {
         _tokenUtils = tokenUtils;
+        _authService = authService;
     }
 
     @GetMapping("/verify")
@@ -22,8 +28,18 @@ public class AuthController {
         return _tokenUtils.getUsernameFromToken(token);
     }
 
+    @GetMapping("/permission")
+    public String getPermissions(@RequestHeader("Auth-Token") String token) throws NotFoundException {
+        return _authService.getPermission(token);
+    }
+
     @GetMapping("/hello")
     public String hello() {
         return "CAOOOO";
+    }
+
+    @PutMapping("/login")
+    public UserResponse login(@RequestBody LoginRequest request){
+        return _authService.login(request);
     }
 }

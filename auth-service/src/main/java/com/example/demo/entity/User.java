@@ -19,7 +19,12 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity implements Serializable {
+public class User implements Serializable {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String username; //email

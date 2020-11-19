@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "auth-service")
 public interface IAuthClient {
 
-    @GetMapping("/auth-service/verify")
+    @GetMapping("/auth/verify")
     String verify(@RequestHeader("Auth-Token") String token);
 
-    @GetMapping("/auth-service/permission")
+    @GetMapping("/auth/permission")
     String getPermission(@RequestHeader("Auth-Token") String token);
 
 }

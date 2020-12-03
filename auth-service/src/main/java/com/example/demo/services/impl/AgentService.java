@@ -1,7 +1,9 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.dto.request.UpdateAgentRequest;
 import com.example.demo.dto.response.AgentResponse;
 import com.example.demo.entity.Agent;
+import com.example.demo.entity.SimpleUser;
 import com.example.demo.repository.IAgentRepository;
 import com.example.demo.services.IAgentService;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,21 @@ public class AgentService implements IAgentService {
         else{
             return null;
         }
+    }
+
+    @Override
+    public void updateAgentById(Long id, UpdateAgentRequest request) {
+        Agent agent = _agentRepository.findOneById(id);
+        if(request.getName() != null)
+            agent.setName(request.getName());
+        if(request.getPib() != null)
+            agent.setPib(request.getPib());
+        if(request.getBankAccountNumber() != null)
+            agent.setBankAccountNumber(request.getBankAccountNumber());
+        if(request.getAddress() != null)
+            agent.setAddress(request.getAddress());
+
+        _agentRepository.save(agent);
     }
 
     private AgentResponse mapAgentToResponse(Agent agent){

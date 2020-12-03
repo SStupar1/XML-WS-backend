@@ -136,7 +136,7 @@ public class AuthService implements IAuthService {
         authorities.add(_authorityRepository.findOneByName("ROLE_AD_USER"));       // samo zbog toga sto moze da postavlja oglas
         user.setAuthorities(new HashSet<>(authorities));
 
-        simpleUser.setAddress(request.getCountry()+", "+request.getCity()+","+request.getAddress());
+        simpleUser.setAddress(request.getAddress());
         simpleUser.setFirstName(request.getFirstName());
         simpleUser.setLastName(request.getLastName());
         simpleUser.setSsn(request.getSsn());

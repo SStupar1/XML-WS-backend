@@ -6,9 +6,6 @@ import com.example.demo.dto.response.UserResponse;
 import com.example.demo.security.TokenUtils;
 import com.example.demo.services.IAuthService;
 import javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -32,7 +32,7 @@ public class Agent{
 
     private String address;
 
-    private UUID simpleUserId;
+    private Long simpleUserId;
 
     public Agent() {
         this.dateFounded = new Date();

@@ -56,10 +56,10 @@ insert into admin (id, first_name, last_name, user_id) values
 (1, 'Ms', 'Misoni', 1);
 
 insert into agent (id, bank_account_number, date_founded, name, pib, user_id, address, simple_user_id) values
-(1, 'DE72 3702 0500 0009 7097 00', '2020/02/25', 'Marko Kraljevic',  '123-45-6789', 2, 'Serbia,Novi Sad,Svetislava Kasapinovica, 69', null),
-(2, '0500 0009 3702 FE22 7097 00', '2020/02/25', 'Dragan Topalovic', '321-54-9876', 3, 'Serbia,Beograd,Knez Mihailova, 15', null);
+(1, 'DE72 3702 0500 0009 7097 00', '2020/02/25', 'Marko Kraljevic',  '123-45-6789', 2, 'Svetislava Kasapinovica 3', null),
+(2, '0500 0009 3702 FE22 7097 00', '2020/02/25', 'Dragan Topalovic', '321-54-9876', 3, 'Knez Mihailova 15', null);
 
 insert into simple_user (id, address, first_name, last_name, request_status, ssn, user_id) values
-(1, 'Serbia, Novi Sad, Pionirska,26', 'Somi', 'Misoni', 'APPROVED', '1547854896523', 4),
-(2, 'Serbia, Nis, Njegoseva, 55', 'Didi', 'Mimica-Kostovic', 'APPROVED', '1547858576523', 5);
+(1, 'Pionirska 26', 'Somi', 'Misoni', 'APPROVED', '1547854896523', 4),
+(2, 'Njegoseva 55', 'Didi', 'Mimica-Kostovic', 'APPROVED', '1547858576523', 5);
 

@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.request.UpdateAgentRequest;
-import com.example.demo.dto.request.UpdateSimpleUserRequest;
 import com.example.demo.dto.response.AgentResponse;
 import com.example.demo.services.IAgentService;
 import org.springframework.http.HttpStatus;

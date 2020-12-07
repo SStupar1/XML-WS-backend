@@ -80,7 +80,7 @@ public class AuthService implements IAuthService {
         if(user.getSimpleUser() != null && user.getSimpleUser().getRequestStatus().equals(RequestStatus.DENIED)){
             throw new GeneralException("Your registration has been denied.", HttpStatus.BAD_REQUEST);
         }
-        if(user.getSimpleUser() != null && user.getSimpleUser().getRequestStatus().equals(RequestStatus.CONFIRMED)){
+        if(user.getSimpleUser() != null && user.getSimpleUser().getRequestStatus().equals(RequestStatus.APPROVED)){
             throw new GeneralException("Your registration has been approved by admin. Please activate your account.", HttpStatus.BAD_REQUEST);
         }
 

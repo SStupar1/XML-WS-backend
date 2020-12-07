@@ -1,10 +1,11 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.dto.request.GetIdRequest;
 import com.example.demo.dto.request.UpdateSimpleUserRequest;
 import com.example.demo.dto.response.SimpleUserResponse;
 import com.example.demo.entity.SimpleUser;
 import com.example.demo.repository.ISimpleUserRepository;
-import com.example.demo.repository.IUserRepository;
+import com.example.demo.services.IEmailService;
 import com.example.demo.services.ISimpleUserService;
 import com.example.demo.util.enums.RequestStatus;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,11 @@ public class SimpleUserService implements ISimpleUserService {
 
     private final ISimpleUserRepository _simpleUserRepository;
 
-    public SimpleUserService(ISimpleUserRepository simpleUserRepository) {
+    private final IEmailService _emailService;
+
+    public SimpleUserService(ISimpleUserRepository simpleUserRepository, IEmailService emailService) {
         _simpleUserRepository = simpleUserRepository;
+        _emailService = emailService;
     }
 
 
@@ -56,6 +60,15 @@ public class SimpleUserService implements ISimpleUserService {
             simpleUser.setSsn(request.getSsn());
 
         _simpleUserRepository.save(simpleUser);
+    }
+
+    @Override
+    public void approveRegistrationRequest(GetIdRequest request) {
+        SimpleUser simpleUser = _simpleUserRepository.findOneById(request.getId());
+        simpleUser.setRequestStatus(RequestStatus.APPROVED);
+        SimpleUser savedSimpleUser = _simpleUserRepository.save(simpleUser);
+
+        _emailService.approveRegistrationMail(savedSimpleUser);
     }
 
     private SimpleUserResponse mapSimpleUserToResponse(SimpleUser simpleUser){

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.request.GetIdRequest;
 import com.example.demo.dto.request.UpdateSimpleUserRequest;
 import com.example.demo.dto.response.SimpleUserResponse;
 
@@ -13,4 +14,6 @@ public interface ISimpleUserService {
     List<SimpleUserResponse> getRegistrationRequests();
 
     void updateSimpleUserById(Long id, UpdateSimpleUserRequest request);
+
+    void approveRegistrationRequest(GetIdRequest request);
 }

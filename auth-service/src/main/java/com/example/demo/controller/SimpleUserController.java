@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.GetIdRequest;
 import com.example.demo.dto.request.UpdateSimpleUserRequest;
 import com.example.demo.dto.response.SimpleUserResponse;
 import com.example.demo.services.ISimpleUserService;
@@ -41,6 +42,11 @@ public class SimpleUserController {
     @PreAuthorize("hasAuthority('REGISTER')")
     public List<SimpleUserResponse> getRegistrationRequests(){
         return _simpleUserService.getRegistrationRequests();
+    }
+
+    @PutMapping("/confirm")
+    public void approveRegistrationRequest(@RequestBody GetIdRequest request){
+        _simpleUserService.approveRegistrationRequest(request);
     }
 
 }

@@ -6,4 +6,5 @@ public interface IEmailService {
 
     void approveRegistrationMail(SimpleUser simpleUser);
 
+    void denyRegistrationMail(SimpleUser simpleUser);
 }

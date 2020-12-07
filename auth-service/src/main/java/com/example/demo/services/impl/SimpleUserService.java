@@ -80,7 +80,11 @@ public class SimpleUserService implements ISimpleUserService {
 
     @Override
     public void denyRegistrationRequest(GetIdRequest request) {
-        
+        SimpleUser simpleUser = _simpleUserRepository.findOneById(request.getId());
+        simpleUser.setRequestStatus(RequestStatus.DENIED);
+        SimpleUser savedSimpleUser = _simpleUserRepository.save(simpleUser);
+
+        _emailService.denyRegistrationMail(savedSimpleUser);
     }
 
     private SimpleUserResponse mapSimpleUserToResponse(SimpleUser simpleUser){

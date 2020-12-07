@@ -25,4 +25,14 @@ public class EmailService implements IEmailService {
         context.setVariable("link", String.format("http://localhost:4200/login/%s", simpleUser.getId()));
         _emailContext.send(to, subject, "approvedRegistration", context);
     }
+
+    @Override
+    public void denyRegistrationMail(SimpleUser simpleUser) {
+        String to = simpleUser.getUser().getUsername();
+        System.out.println(to);
+        String subject = "Your registration has been denied.";
+        Context context = new Context();
+        context.setVariable("name", String.format("%s %s", simpleUser.getFirstName(), simpleUser.getLastName()));
+        _emailContext.send(to, subject, "deniedRegistration", context);
+    }
 }

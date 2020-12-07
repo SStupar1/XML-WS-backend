@@ -44,9 +44,23 @@ public class SimpleUserController {
         return _simpleUserService.getRegistrationRequests();
     }
 
-    @PutMapping("/confirm")
+    //admin odobrava
+    @PutMapping("/approve")
+    @PreAuthorize("hasAuthority('REGISTER')")
     public void approveRegistrationRequest(@RequestBody GetIdRequest request){
         _simpleUserService.approveRegistrationRequest(request);
+    }
+
+    @PutMapping("/deny")
+    @PreAuthorize("hasAuthority('REGISTER')")
+    public void denyRegistrationRequest(@RequestBody GetIdRequest request){
+        _simpleUserService.denyRegistrationRequest(request);
+    }
+
+    //user potvrdjuje na mail-u
+    @PutMapping("/confirm")
+    public void confirmRegistrationRequest(@RequestBody GetIdRequest request){
+        _simpleUserService.confirmRegistrationRequest(request);
     }
 
 }

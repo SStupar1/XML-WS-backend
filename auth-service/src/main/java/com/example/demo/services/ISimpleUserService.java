@@ -16,4 +16,8 @@ public interface ISimpleUserService {
     void updateSimpleUserById(Long id, UpdateSimpleUserRequest request);
 
     void approveRegistrationRequest(GetIdRequest request);
+
+    void confirmRegistrationRequest(GetIdRequest request);
+
+    void denyRegistrationRequest(GetIdRequest request);
 }

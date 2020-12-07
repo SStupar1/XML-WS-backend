@@ -71,6 +71,18 @@ public class SimpleUserService implements ISimpleUserService {
         _emailService.approveRegistrationMail(savedSimpleUser);
     }
 
+    @Override
+    public void confirmRegistrationRequest(GetIdRequest request) {
+        SimpleUser simpleUser = _simpleUserRepository.findOneById(request.getId());
+        simpleUser.setRequestStatus(RequestStatus.CONFIRMED);
+        _simpleUserRepository.save(simpleUser);
+    }
+
+    @Override
+    public void denyRegistrationRequest(GetIdRequest request) {
+        
+    }
+
     private SimpleUserResponse mapSimpleUserToResponse(SimpleUser simpleUser){
         SimpleUserResponse simpleUserResponse = new SimpleUserResponse();
         simpleUserResponse.setId(simpleUser.getId());

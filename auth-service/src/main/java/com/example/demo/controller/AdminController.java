@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
     }
 
     @PutMapping("/{id}")
-    public void updateAgent(@PathVariable("id")Long id, @RequestBody UpdateAdminRequest request){
+    public void updateAdmin(@PathVariable("id")Long id, @RequestBody UpdateAdminRequest request){
         _adminService.updateAdminById(id, request);
     }
 

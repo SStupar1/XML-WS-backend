@@ -161,11 +161,11 @@ public class AuthService implements IAuthService {
         }
         userResponse.setUsername(user.getUsername());
         if(user.getRoles().contains(_authorityRepository.findOneByName("ROLE_ADMIN"))){
-            userResponse.setUserRole("ADMIN_ROLE");
+            userResponse.setUserRole("ADMIN");
         }else if(user.getRoles().contains(_authorityRepository.findOneByName("ROLE_AGENT"))){
-            userResponse.setUserRole("AGENT_ROLE");
+            userResponse.setUserRole("AGENT");
         }else if(user.getRoles().contains(_authorityRepository.findOneByName("ROLE_SIMPLE_USER"))){
-            userResponse.setUserRole("SIMPLE_USER_ROLE");
+            userResponse.setUserRole("SIMPLE_USER");
         }
         return userResponse;
     }

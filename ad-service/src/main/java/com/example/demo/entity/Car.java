@@ -27,13 +27,13 @@ public class Car {
     private CarModel carModel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fuel_type_id")
+    @JoinColumn(name = "")
     private FuelType fuelType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gearshift_type_id")
     private GearshiftType gearshiftType;
 
-    private String kmTraveled; //predjena kilometraza
+    private int kmTraveled; //predjena kilometraza
 
 }

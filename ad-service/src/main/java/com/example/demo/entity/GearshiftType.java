@@ -23,7 +23,7 @@ public class GearshiftType {
 
     private String type;
 
-    private String numberOfGears;
+    private int numberOfGears; //broj zupcanika
 
     @OneToMany(mappedBy = "gearshiftType", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars = new ArrayList<>();

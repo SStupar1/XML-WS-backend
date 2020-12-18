@@ -21,11 +21,9 @@ public class FuelType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
+    private String type; //benzin, dizel...
 
     private String tankCapacity;
-
-    private boolean gas;
 
     @OneToMany(mappedBy = "fuelType", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars = new ArrayList<>();

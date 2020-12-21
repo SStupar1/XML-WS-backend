@@ -1,8 +1,10 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.dto.request.CreateFuelTypeRequest;
 import com.example.demo.dto.request.UpdateFuelTypeRequest;
 import com.example.demo.dto.response.CarModelResponse;
 import com.example.demo.dto.response.FuelTypeResponse;
+import com.example.demo.entity.CarBrand;
 import com.example.demo.entity.CarModel;
 import com.example.demo.entity.FuelType;
 import com.example.demo.repository.ICarModelRepository;
@@ -34,12 +36,23 @@ public class FuelTypeService implements IFuelTypeService {
     public boolean updateCarClassById(Long id, UpdateFuelTypeRequest request) {
         boolean updated = false;
         FuelType fuelType = _fuelTypeRepository.findOneById(id);
-        fuelType.setType(request.getType());
-        fuelType.setTankCapacity(request.getTankCapacity());
-        updated = true;
+        if(fuelType != null) {
+            fuelType.setType(request.getType());
+            fuelType.setTankCapacity(request.getTankCapacity());
+            updated = true;
+        }
         _fuelTypeRepository.save(fuelType);
 
         return updated;
+    }
+
+    @Override
+    public FuelTypeResponse createFuelType(CreateFuelTypeRequest request) {
+        FuelType fuelType = new FuelType();
+        fuelType.setType(request.getType());
+        fuelType.setTankCapacity(request.getTankCapacity());
+        FuelType savedFuelType = _fuelTypeRepository.save(fuelType);
+        return mapFuelTypetoFuelTypeResponse(savedFuelType);
     }
 
     private FuelTypeResponse mapFuelTypetoFuelTypeResponse(FuelType fuelType) {

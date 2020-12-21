@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.CreateCarBrandRequest;
+import com.example.demo.dto.request.CreateFuelTypeRequest;
 import com.example.demo.dto.request.UpdateCarClassRequest;
 import com.example.demo.dto.request.UpdateFuelTypeRequest;
+import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarModelResponse;
 import com.example.demo.dto.response.FuelTypeResponse;
 import com.example.demo.services.ICarModelService;
@@ -34,6 +37,11 @@ public class FuelTypeController {
         else{
             return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping()
+    public FuelTypeResponse createFuelType(@RequestBody CreateFuelTypeRequest request){
+        return _fuelTypeService.createFuelType(request);
     }
 
 }

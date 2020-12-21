@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.CreateCarBrandRequest;
+import com.example.demo.dto.request.CreateGearshiftTypeRequest;
 import com.example.demo.dto.request.UpdateFuelTypeRequest;
 import com.example.demo.dto.request.UpdateGearshiftRequest;
+import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.GearShiftTypeResponse;
 import com.example.demo.services.IGearshiftTypeService;
 import org.springframework.http.HttpStatus;
@@ -32,5 +35,9 @@ public class GearshiftTypeController {
         else{
             return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
         }
+    }
+    @PostMapping()
+        public GearShiftTypeResponse createGearshiftType(@RequestBody CreateGearshiftTypeRequest request){
+        return _gearshiftTypeService.createGearshiftType(request);
     }
 }

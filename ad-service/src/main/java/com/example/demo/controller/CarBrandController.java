@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.request.CreateCarBrandRequest;
 import com.example.demo.dto.request.UpdateCarBrandRequest;
 import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.services.ICarBrandService;
@@ -33,5 +34,10 @@ public class CarBrandController {
         else{
             return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping()
+    public CarBrandResponse createCarBrand(@RequestBody CreateCarBrandRequest request){
+        return _carBrandService.createCarBrand(request);
     }
 }

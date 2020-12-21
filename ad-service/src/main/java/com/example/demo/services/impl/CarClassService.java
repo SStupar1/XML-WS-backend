@@ -1,6 +1,8 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.dto.request.CreateCarClassRequest;
 import com.example.demo.dto.request.UpdateCarClassRequest;
+import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarClassResponse;
 import com.example.demo.entity.CarBrand;
 import com.example.demo.entity.CarClass;
@@ -30,11 +32,21 @@ public class CarClassService implements ICarClassService {
     public boolean updateCarClassById(Long id, UpdateCarClassRequest request) {
         boolean updated = false;
         CarClass carClass = _carClassRepository.findOneById(id);
-        carClass.setName(request.getName());
-        updated = true;
+        if(carClass != null) {
+            carClass.setName(request.getName());
+            updated = true;
+        }
         _carClassRepository.save(carClass);
 
         return updated;
+    }
+
+    @Override
+    public CarClassResponse createCarClass(CreateCarClassRequest request) {
+        CarClass carClass = new CarClass();
+        carClass.setName(request.getName());
+        CarClass savedCarClass = _carClassRepository.save(carClass);
+        return mapCarClassToCarClassResponse(savedCarClass);
     }
 
     private CarClassResponse mapCarClassToCarClassResponse(CarClass carClass) {

@@ -1,5 +1,6 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.dto.request.CreateCarBrandRequest;
 import com.example.demo.dto.request.UpdateCarBrandRequest;
 import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.entity.Car;
@@ -9,6 +10,7 @@ import com.example.demo.services.ICarBrandService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,12 +34,23 @@ public class CarBrandService implements ICarBrandService {
     public boolean updateCarBrandById(Long id, UpdateCarBrandRequest request) {
         boolean updated = false;
         CarBrand carBrand = _carBrandRepository.findOneById(id);
-        carBrand.setCountry(request.getCountry());
-        carBrand.setName(request.getName());
-        updated = true;
+        if(carBrand != null) {
+            carBrand.setCountry(request.getCountry());
+            carBrand.setName(request.getName());
+            updated = true;
+        }
         _carBrandRepository.save(carBrand);
 
         return updated;
+    }
+
+    @Override
+    public CarBrandResponse createCarBrand(CreateCarBrandRequest request) {
+        CarBrand carBrand = new CarBrand();
+        carBrand.setName(request.getName());
+        carBrand.setCountry(request.getCountry());
+        CarBrand savedCarBrand = _carBrandRepository.save(carBrand);
+        return mapCarBrandToCarBrandResponse(savedCarBrand);
     }
 
     private CarBrandResponse mapCarBrandToCarBrandResponse(CarBrand carBrand) {

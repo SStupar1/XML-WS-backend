@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.CreateCarBrandRequest;
+import com.example.demo.dto.request.CreateCarClassRequest;
 import com.example.demo.dto.request.UpdateCarBrandRequest;
 import com.example.demo.dto.request.UpdateCarClassRequest;
 import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarClassResponse;
+import com.example.demo.entity.CarClass;
 import com.example.demo.services.ICarClassService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +35,10 @@ public class CarClassController {
         else{
             return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping()
+    public CarClassResponse createCarClass(@RequestBody CreateCarClassRequest request){
+        return _carClassService.createCarClass(request);
     }
 }

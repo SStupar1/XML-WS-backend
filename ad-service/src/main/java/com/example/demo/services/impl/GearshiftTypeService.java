@@ -1,7 +1,9 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.dto.request.CreateGearshiftTypeRequest;
 import com.example.demo.dto.request.UpdateGearshiftRequest;
 import com.example.demo.dto.response.GearShiftTypeResponse;
+import com.example.demo.entity.CarBrand;
 import com.example.demo.entity.FuelType;
 import com.example.demo.entity.GearshiftType;
 import com.example.demo.repository.IGearshiftTypeRepository;
@@ -32,12 +34,23 @@ public class GearshiftTypeService implements IGearshiftTypeService {
     public boolean updateCarClassById(Long id, UpdateGearshiftRequest request) {
         boolean updated = false;
         GearshiftType gearshiftType = _gearshiftTypeRepository.findOneById(id);
-        gearshiftType.setType(request.getType());
-        gearshiftType.setNumberOfGears(request.getNumberOfGears());
-        updated = true;
+        if(gearshiftType != null) {
+            gearshiftType.setType(request.getType());
+            gearshiftType.setNumberOfGears(request.getNumberOfGears());
+            updated = true;
+        }
         _gearshiftTypeRepository.save(gearshiftType);
 
         return updated;
+    }
+
+    @Override
+    public GearShiftTypeResponse createGearshiftType(CreateGearshiftTypeRequest request) {
+        GearshiftType gearshiftType = new GearshiftType();
+        gearshiftType.setType(request.getType());
+        gearshiftType.setNumberOfGears(request.getNumberOfGears());
+        GearshiftType savedGearshiftType = _gearshiftTypeRepository.save(gearshiftType);
+        return mapGearshiftTypeToGearshiftTypeRepository(savedGearshiftType);
     }
 
     private GearShiftTypeResponse mapGearshiftTypeToGearshiftTypeRepository(GearshiftType gearshiftType) {

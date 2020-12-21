@@ -1,19 +1,31 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.dto.request.CreateCarRequest;
 import com.example.demo.dto.request.UpdateCarRequest;
 import com.example.demo.dto.response.CarResponse;
 import com.example.demo.entity.Car;
+import com.example.demo.repository.ICarModelRepository;
 import com.example.demo.repository.ICarRepository;
+import com.example.demo.repository.IFuelTypeRepository;
+import com.example.demo.repository.IGearshiftTypeRepository;
 import com.example.demo.services.ICarService;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class CarService implements ICarService {
 
     private final ICarRepository _carRepository;
+    private final ICarModelRepository _carModelRepository;
+    private final IFuelTypeRepository _fuelTypeRepository;
+    private final IGearshiftTypeRepository _gearshiftTypeRepository;
 
-    public CarService(ICarRepository carRepository){
+    public CarService(ICarRepository carRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiftTypeRepository){
         _carRepository = carRepository;
+        _carModelRepository = carModelRepository;
+        _fuelTypeRepository = fuelTypeRepository;
+        _gearshiftTypeRepository = gearshiftTypeRepository;
     }
 
     @Override
@@ -40,11 +52,24 @@ public class CarService implements ICarService {
         return updated;
     }
 
+    @Override
+    public CarResponse createCar(CreateCarRequest request) {
+        Car car = new Car();
+        car.setKmTraveled(request.getKmTraveled());
+        car.setCarModel(_carModelRepository.findOneById(request.getCarModelId()));
+        car.setGearshiftType(_gearshiftTypeRepository.findOneById(request.getGearshiftTypeId()));
+        car.setFuelType(_fuelTypeRepository.findOneById(request.getFuelTypeId()));
+        Car savedCar = _carRepository.save(car);
+        return mapCarToResponse(savedCar);
+    }
+
     private CarResponse mapCarToResponse(Car car) {
         CarResponse carResponse = new CarResponse();
         carResponse.setId(car.getId());
         carResponse.setKmTraveled(car.getKmTraveled());
-
+        carResponse.setCarModelId(car.getCarModel().getId());
+        carResponse.setFuelTypeId(car.getFuelType().getId());
+        carResponse.setGearshiftTypeId(car.getGearshiftType().getId());
         return carResponse;
     }
 }

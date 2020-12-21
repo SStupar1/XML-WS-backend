@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.CreateCarBrandRequest;
+import com.example.demo.dto.request.CreateCarRequest;
 import com.example.demo.dto.request.UpdateCarRequest;
+import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarResponse;
 import com.example.demo.services.ICarService;
 import org.springframework.http.HttpStatus;
@@ -39,4 +42,8 @@ public class CarController {
         }
     }
 
+    @PostMapping()
+    public CarResponse createCar(@RequestBody CreateCarRequest request){
+        return _carService.createCar(request);
+    }
 }

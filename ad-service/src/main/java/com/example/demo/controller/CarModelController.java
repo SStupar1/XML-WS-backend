@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.CreateCarBrandRequest;
+import com.example.demo.dto.request.CreateCarModelRequest;
 import com.example.demo.dto.request.UpdateCarBrandRequest;
 import com.example.demo.dto.request.UpdateCarModelRequest;
 import com.example.demo.dto.response.CarBrandResponse;
@@ -35,5 +37,9 @@ public class CarModelController {
         else{
             return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
         }
+    }
+    @PostMapping()
+    public CarModelResponse createCarModel(@RequestBody CreateCarModelRequest request){
+        return _carModelService.createCarModel(request);
     }
 }

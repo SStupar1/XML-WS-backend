@@ -11,4 +11,10 @@ public class CarResponse {
 
     private int kmTraveled;
 
+    private Long fuelTypeId;
+
+    private Long gearshiftTypeId;
+
+    private Long carModelId;
+
 }

@@ -1,12 +1,11 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.dto.request.LoginRequest;
+import com.example.demo.dto.request.RegisterAgentRequest;
 import com.example.demo.dto.request.RegistrationRequest;
 import com.example.demo.dto.response.UserResponse;
-import com.example.demo.entity.Authority;
-import com.example.demo.entity.MyUserDetails;
-import com.example.demo.entity.SimpleUser;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
+import com.example.demo.repository.IAgentRepository;
 import com.example.demo.repository.IAuthorityRepository;
 import com.example.demo.repository.ISimpleUserRepository;
 import com.example.demo.repository.IUserRepository;
@@ -45,15 +44,18 @@ public class AuthService implements IAuthService {
 
     private final ISimpleUserRepository _simpleUserRepository;
 
+    private final IAgentRepository _agentRepository;
 
 
-    public AuthService(TokenUtils tokenUtils, IUserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, IAuthorityRepository authorityRepository, ISimpleUserRepository simpleUserRepository) {
+
+    public AuthService(TokenUtils tokenUtils, IUserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, IAuthorityRepository authorityRepository, ISimpleUserRepository simpleUserRepository, IAgentRepository agentRepository) {
         _tokenUtils = tokenUtils;
         _userRepository = userRepository;
         _passwordEncoder = passwordEncoder;
         _authenticationManager = authenticationManager;
         _authorityRepository = authorityRepository;
         _simpleUserRepository = simpleUserRepository;
+        _agentRepository = agentRepository;
     }
 
     @Override
@@ -128,12 +130,6 @@ public class AuthService implements IAuthService {
         user.setHasSignedIn(false);
         List<Authority> authorities = new ArrayList<>();
         authorities.add(_authorityRepository.findOneByName("ROLE_SIMPLE_USER"));
-        authorities.add(_authorityRepository.findOneByName("ROLE_RENT_USER"));
-        authorities.add(_authorityRepository.findOneByName("ROLE_REQUEST"));       // treba da se dodaje kada se rentira
-        authorities.add(_authorityRepository.findOneByName("ROLE_COMMENT_USER"));  // treba da se dodaje kada se rentira
-        authorities.add(_authorityRepository.findOneByName("ROLE_MESSAGE_USER"));  // treba da se dodaje kada se rentira
-        authorities.add(_authorityRepository.findOneByName("ROLE_REVIEWER_USER")); // treba da se dodaje kada se rentira
-        authorities.add(_authorityRepository.findOneByName("ROLE_AD_USER"));       // samo zbog toga sto moze da postavlja oglas
         user.setAuthorities(new HashSet<>(authorities));
 
         simpleUser.setAddress(request.getAddress());
@@ -148,6 +144,39 @@ public class AuthService implements IAuthService {
 
         return mapUserToUserResponse(savedUser);
 
+    }
+
+    @Override
+    public boolean registerAgent(RegisterAgentRequest request) {
+        if(!request.getPassword().equals(request.getRePassword())){
+            throw new GeneralException("Passwords do not match.", HttpStatus.BAD_REQUEST);
+        }
+        User user = new User();
+        Agent agent = new Agent();
+
+        if(request.getUsername().equals(_userRepository.findOneByUsername(request.getUsername()))){
+            return false;
+        }
+        user.setUsername(request.getUsername());
+        user.setPassword(_passwordEncoder.encode(request.getPassword()));
+        user.setUserRole(UserRoles.AGENT);
+        user.setDeleted(false);
+        user.setHasSignedIn(false);
+        List<Authority> authorities = new ArrayList<>();
+        authorities.add(_authorityRepository.findOneByName("ROLE_AGENT"));
+        user.setAuthorities(new HashSet<>(authorities));
+
+        agent.setName(request.getName());
+        agent.setBankAccountNumber(request.getBankAccountNumber());
+        agent.setPib(request.getPib());
+        agent.setAddress(request.getAddress());
+        agent.setDateFounded(request.getDateFounded());
+        Agent savedAgent = _agentRepository.save(agent);
+        savedAgent.setUser(user);
+        user.setAgent(savedAgent);
+        _userRepository.save(user);
+
+        return true;
     }
 
     private UserResponse mapUserToUserResponse(User user) {

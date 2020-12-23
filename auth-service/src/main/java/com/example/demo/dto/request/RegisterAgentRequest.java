@@ -22,7 +22,6 @@ public class RegisterAgentRequest {
 
     private String pib;
 
-    @JsonFormat(pattern = "yyyy/MM/dd")
     private Date dateFounded;
 
     private String bankAccountNumber;

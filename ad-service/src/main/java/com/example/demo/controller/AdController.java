@@ -1,13 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.CreateAdRequest;
+import com.example.demo.dto.request.CreateCarRequest;
 import com.example.demo.dto.response.AdResponse;
+import com.example.demo.dto.response.CarResponse;
 import com.example.demo.services.IAdService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -34,5 +34,9 @@ public class AdController {
         }
     }
 
+    /*@PostMapping()
+    public AdResponse createAd(@RequestBody CreateAdRequest request){
+        return _adService.createAd(request);
+    }*/
 
 }

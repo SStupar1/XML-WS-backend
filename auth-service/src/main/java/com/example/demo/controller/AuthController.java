@@ -54,8 +54,9 @@ public class AuthController {
     @PostMapping("/register-agent")
     //@PreAuthorize("hasAuthority('REGISTER')")
     public ResponseEntity<?> registerAgent(@RequestBody RegisterAgentRequest request){
+
         if(_authService.registerAgent(request)){
-            return new ResponseEntity<>("Agent created !", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         else{
             return new ResponseEntity<>("User already exists !", HttpStatus.NOT_FOUND);

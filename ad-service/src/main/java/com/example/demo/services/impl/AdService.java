@@ -25,8 +25,8 @@ public class AdService implements IAdService {
 
     @Override
     public AdResponse getAdById(Long id) {
-        Ad ad = _adRepository.findOneById(id);
-        Agent agent = _authClient.getAgent(ad.getAgent());
+       /* Ad ad = _adRepository.findOneById(id);
+        Agent agent = _authClient.getAgent(ad.getOwnerId());
         if(ad != null){
             AdResponse adResponse = new AdResponse();
             adResponse.setId(ad.getId());
@@ -39,7 +39,7 @@ public class AdService implements IAdService {
             adResponse.setCarId(ad.getCar().getId());
 
             return adResponse;
-        }
+        }*/
         return null;
     }
 }

@@ -9,7 +9,11 @@ import java.util.List;
 public interface ICarModelService {
     List<CarModelResponse> getAllCarModels();
 
-    boolean updateCarBrandById(Long id, UpdateCarModelRequest request);
+    boolean updateCarModelById(Long id, UpdateCarModelRequest request);
 
     CarModelResponse createCarModel(CreateCarModelRequest request);
+
+    boolean deleteCarModelById(Long id);
+
+    CarModelResponse getCarModelById(Long id);
 }

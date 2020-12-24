@@ -4,6 +4,7 @@ import com.example.demo.dto.request.CreateCarRequest;
 import com.example.demo.dto.request.UpdateCarRequest;
 import com.example.demo.dto.response.CarResponse;
 import com.example.demo.entity.Car;
+import com.example.demo.entity.CarModel;
 import com.example.demo.repository.ICarModelRepository;
 import com.example.demo.repository.ICarRepository;
 import com.example.demo.repository.IFuelTypeRepository;
@@ -41,15 +42,13 @@ public class CarService implements ICarService {
 
     @Override
     public boolean updateCarById(Long id, UpdateCarRequest request) {
-        boolean updated = false;
         Car car = _carRepository.findOneById(id);
         if(request.getKmTraveled() >= car.getKmTraveled()) {
             car.setKmTraveled(request.getKmTraveled());
-            updated = true;
             _carRepository.save(car);
+            return true;
         }
-
-        return updated;
+        return false;
     }
 
     @Override
@@ -61,6 +60,16 @@ public class CarService implements ICarService {
         car.setFuelType(_fuelTypeRepository.findOneById(request.getFuelTypeId()));
         Car savedCar = _carRepository.save(car);
         return mapCarToResponse(savedCar);
+    }
+
+    @Override
+    public boolean deleteCarById(Long id) {
+        Car car = _carRepository.findOneById(id);
+        if(car != null){
+            _carRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     private CarResponse mapCarToResponse(Car car) {

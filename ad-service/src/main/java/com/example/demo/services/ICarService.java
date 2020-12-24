@@ -10,4 +10,6 @@ public interface ICarService {
     boolean updateCarById(Long id, UpdateCarRequest request);
 
     CarResponse createCar(CreateCarRequest request);
+
+    boolean deleteCarById(Long id);
 }

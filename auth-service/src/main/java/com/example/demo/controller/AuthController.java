@@ -4,6 +4,7 @@ import com.example.demo.dto.request.LoginRequest;
 import com.example.demo.dto.request.RegisterAgentRequest;
 import com.example.demo.dto.request.RegistrationRequest;
 import com.example.demo.dto.response.AgentResponse;
+import com.example.demo.dto.response.TempResponse;
 import com.example.demo.dto.response.UserResponse;
 import com.example.demo.security.TokenUtils;
 import com.example.demo.services.IAuthService;
@@ -54,9 +55,10 @@ public class AuthController {
     @PostMapping("/register-agent")
     //@PreAuthorize("hasAuthority('REGISTER')")
     public ResponseEntity<?> registerAgent(@RequestBody RegisterAgentRequest request){
-
+        TempResponse temp = new TempResponse();
+        temp.setText("Registered agent");
         if(_authService.registerAgent(request)){
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(temp, HttpStatus.OK);
         }
         else{
             return new ResponseEntity<>("User already exists !", HttpStatus.NOT_FOUND);

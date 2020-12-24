@@ -11,4 +11,8 @@ public interface ICarBrandService {
     boolean updateCarBrandById(Long id, UpdateCarBrandRequest request);
 
     CarBrandResponse createCarBrand(CreateCarBrandRequest request);
+
+    boolean deleteCarBrandById(Long id);
+
+    CarBrandResponse getCarBrandById(Long id);
 }

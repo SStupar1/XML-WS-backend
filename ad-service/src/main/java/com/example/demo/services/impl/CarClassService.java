@@ -30,15 +30,13 @@ public class CarClassService implements ICarClassService {
 
     @Override
     public boolean updateCarClassById(Long id, UpdateCarClassRequest request) {
-        boolean updated = false;
         CarClass carClass = _carClassRepository.findOneById(id);
         if(carClass != null) {
             carClass.setName(request.getName());
-            updated = true;
+            _carClassRepository.save(carClass);
+            return true;
         }
-        _carClassRepository.save(carClass);
-
-        return updated;
+        return false;
     }
 
     @Override
@@ -47,6 +45,25 @@ public class CarClassService implements ICarClassService {
         carClass.setName(request.getName());
         CarClass savedCarClass = _carClassRepository.save(carClass);
         return mapCarClassToCarClassResponse(savedCarClass);
+    }
+
+    @Override
+    public boolean deleteCarClassById(Long id) {
+        CarClass carClass = _carClassRepository.findOneById(id);
+        if(carClass != null){
+            _carClassRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public CarClassResponse getCarClassById(Long id) {
+        CarClass carClass = _carClassRepository.findOneById(id);
+        if(carClass != null) {
+            return mapCarClassToCarClassResponse(carClass);
+        }
+        return null;
     }
 
     private CarClassResponse mapCarClassToCarClassResponse(CarClass carClass) {

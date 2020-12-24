@@ -5,6 +5,7 @@ import com.example.demo.dto.client.Agent;
 import com.example.demo.dto.response.AdResponse;
 import com.example.demo.dto.response.CarResponse;
 import com.example.demo.entity.Ad;
+import com.example.demo.entity.CarModel;
 import com.example.demo.repository.IAdRepository;
 import com.example.demo.services.IAdService;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,16 @@ public class AdService implements IAdService {
     public AdService(IAdRepository adRepository, AuthClient authClient){
         _adRepository = adRepository;
         _authClient = authClient;
+    }
+
+    @Override
+    public boolean deleteAdById(Long id) {
+        Ad ad = _adRepository.findOneById(id);
+        if(ad != null){
+            _adRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override

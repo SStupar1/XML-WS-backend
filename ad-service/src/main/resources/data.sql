@@ -2,13 +2,13 @@ insert into fuel_type(id, type, tank_capacity) values
 (1, 'Diesel', '30L'),
 (2, 'Diesel', '40L'),
 (3, 'Diesel', '50L'),
-(4, 'Diesel', '50L'),
-(5, 'Diesel', '60L'),
-(6, 'Benzine', '60L'),
-(7, 'Benzine', '60L'),
-(8, 'Benzine', '80L'),
-(9, 'Benzine', '30L'),
-(10, 'Benzine', '50L');
+(4, 'Diesel', '60L'),
+(5, 'Diesel', '70L'),
+(6, 'Benzine', '30L'),
+(7, 'Benzine', '40L'),
+(8, 'Benzine', '50L'),
+(9, 'Benzine', '60L'),
+(10, 'Benzine', '70L');
 
 insert into gearshift_type(id, type, number_of_gears) values
 (1, 'Manuel', 4),

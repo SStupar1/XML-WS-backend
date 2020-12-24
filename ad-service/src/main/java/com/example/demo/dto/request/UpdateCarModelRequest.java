@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateCarModelRequest {
     private String name;
+    private Long carClassId;
+    private Long carBrandId;
 }

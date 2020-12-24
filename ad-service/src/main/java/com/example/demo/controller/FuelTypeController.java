@@ -7,6 +7,7 @@ import com.example.demo.dto.request.UpdateFuelTypeRequest;
 import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarModelResponse;
 import com.example.demo.dto.response.FuelTypeResponse;
+import com.example.demo.dto.response.TextResponse;
 import com.example.demo.services.ICarModelService;
 import com.example.demo.services.IFuelTypeService;
 import org.springframework.http.HttpStatus;
@@ -31,11 +32,24 @@ public class FuelTypeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateFuelType(@PathVariable("id") Long id, @RequestBody UpdateFuelTypeRequest request){
-        if(_fuelTypeService.updateCarClassById(id, request)){
-            return new ResponseEntity<>("Updated !", HttpStatus.OK);
+        TextResponse textResponse = new TextResponse();
+        textResponse.setText("Updated !");
+        if(_fuelTypeService.updateFuelTypeById(id, request)){
+            return new ResponseEntity<>(textResponse, HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Fuel type doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getFuelType(@PathVariable("id") Long id){
+        FuelTypeResponse fuelTypeResponse = _fuelTypeService.getFuelTypeById(id);
+        if(fuelTypeResponse != null){
+            return new ResponseEntity<>(fuelTypeResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Fuel type doesn't exist.", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -44,4 +58,16 @@ public class FuelTypeController {
         return _fuelTypeService.createFuelType(request);
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteFuelType(@PathVariable("id") Long id){
+        TextResponse textResponse = new TextResponse();
+        textResponse.setText("Deleted !");
+        if(_fuelTypeService.deleteFuelTypeById(id)){
+            return new ResponseEntity<>(textResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Fuel type doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+    }
 }

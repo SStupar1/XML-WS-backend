@@ -2,7 +2,10 @@ package com.example.demo.services.impl;
 
 import com.example.demo.dto.request.CreateCarModelRequest;
 import com.example.demo.dto.request.UpdateCarModelRequest;
+import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarModelResponse;
+import com.example.demo.entity.CarBrand;
+import com.example.demo.entity.CarClass;
 import com.example.demo.entity.CarModel;
 import com.example.demo.repository.ICarBrandRepository;
 import com.example.demo.repository.ICarClassRepository;
@@ -35,16 +38,18 @@ public class CarModelService implements ICarModelService {
     }
 
     @Override
-    public boolean updateCarBrandById(Long id, UpdateCarModelRequest request) {
-        boolean updated = false;
+    public boolean updateCarModelById(Long id, UpdateCarModelRequest request) {
         CarModel carModel = _carModelRepository.findOneById(id);
         if(carModel != null) {
             carModel.setName(request.getName());
-            updated = true;
+            CarBrand carBrand = _carBrandRepository.findOneById(request.getCarBrandId());
+            CarClass carClass = _carClassRepository.findOneById(request.getCarClassId());
+            carModel.setCarBrand(carBrand);
+            carModel.setCarClass(carClass);
+            _carModelRepository.save(carModel);
+            return true;
         }
-        _carModelRepository.save(carModel);
-
-        return updated;
+        return false;
     }
 
     @Override
@@ -57,10 +62,32 @@ public class CarModelService implements ICarModelService {
         return mapCarModelToCarModelResponse(savedCarModel);
     }
 
+    @Override
+    public boolean deleteCarModelById(Long id) {
+        CarModel carModel = _carModelRepository.findOneById(id);
+        if(carModel != null){
+            _carModelRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public CarModelResponse getCarModelById(Long id) {
+        CarModel carModel = _carModelRepository.findOneById(id);
+        if(carModel != null) {
+            return mapCarModelToCarModelResponse(carModel);
+        }
+        return null;
+    }
+
+
     private CarModelResponse mapCarModelToCarModelResponse(CarModel carModel) {
         CarModelResponse response = new CarModelResponse();
         response.setId(carModel.getId());
         response.setName(carModel.getName());
+        response.setCarBrandId(carModel.getCarBrand().getId());
+        response.setCarClassId(carModel.getCarClass().getId());
         return response;
     }
 

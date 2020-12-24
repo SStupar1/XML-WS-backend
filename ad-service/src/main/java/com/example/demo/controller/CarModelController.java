@@ -6,6 +6,7 @@ import com.example.demo.dto.request.UpdateCarBrandRequest;
 import com.example.demo.dto.request.UpdateCarModelRequest;
 import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarModelResponse;
+import com.example.demo.dto.response.TextResponse;
 import com.example.demo.services.ICarBrandService;
 import com.example.demo.services.ICarModelService;
 import org.springframework.http.HttpStatus;
@@ -31,15 +32,41 @@ public class CarModelController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCarModel(@PathVariable("id") Long id, @RequestBody UpdateCarModelRequest request){
-        if(_carModelService.updateCarBrandById(id, request)){
-            return new ResponseEntity<>("Updated !", HttpStatus.OK);
+        TextResponse textResponse = new TextResponse();
+        textResponse.setText("Updated !");
+        if(_carModelService.updateCarModelById(id, request)){
+            return new ResponseEntity<>(textResponse, HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Car model doesn't exist.", HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCarModel(@PathVariable("id") Long id){
+        CarModelResponse carModelResponse = _carModelService.getCarModelById(id);
+        if(carModelResponse != null){
+            return new ResponseEntity<>(carModelResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Car model doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping()
     public CarModelResponse createCarModel(@RequestBody CreateCarModelRequest request){
         return _carModelService.createCarModel(request);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCarModel(@PathVariable("id") Long id){
+        TextResponse textResponse = new TextResponse();
+        textResponse.setText("Deleted !");
+        if(_carModelService.deleteCarModelById(id)){
+            return new ResponseEntity<>(textResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Car model doesn't exist.", HttpStatus.NOT_FOUND);
+        }
     }
 }

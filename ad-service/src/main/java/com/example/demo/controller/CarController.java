@@ -5,6 +5,7 @@ import com.example.demo.dto.request.CreateCarRequest;
 import com.example.demo.dto.request.UpdateCarRequest;
 import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarResponse;
+import com.example.demo.dto.response.TextResponse;
 import com.example.demo.services.ICarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,23 @@ public class CarController {
 
     @PutMapping("/{id}")
     public  ResponseEntity<?> updateCar(@PathVariable("id") Long id, @RequestBody UpdateCarRequest request){
+        TextResponse textResponse = new TextResponse();
+        textResponse.setText("Updated !");
         if(_carService.updateCarById(id, request)){
-            return new ResponseEntity<>("Updated !", HttpStatus.OK);
+            return new ResponseEntity<>(textResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCar(@PathVariable("id") Long id){
+        TextResponse textResponse = new TextResponse();
+        textResponse.setText("Deleted !");
+        if(_carService.deleteCarById(id)){
+            return new ResponseEntity<>(textResponse, HttpStatus.OK);
         }
         else{
             return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);

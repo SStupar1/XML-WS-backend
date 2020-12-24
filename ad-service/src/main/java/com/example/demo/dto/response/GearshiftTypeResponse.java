@@ -7,14 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarModelResponse {
+public class GearshiftTypeResponse {
 
     private Long id;
 
-    private String name;
+    private String type;
 
-    private Long carClassId;
-
-    private Long carBrandId;
+    private int numberOfGears;
 
 }

@@ -4,6 +4,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.CreateCarBrandRequest;
 import com.example.demo.dto.request.UpdateCarBrandRequest;
 import com.example.demo.dto.response.CarBrandResponse;
+import com.example.demo.dto.response.TextResponse;
 import com.example.demo.services.ICarBrandService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +27,43 @@ public class CarBrandController {
         return _carBrandService.getAllCarBrands();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateCarBrand(@PathVariable("id") Long id, @RequestBody UpdateCarBrandRequest request){
-        if(_carBrandService.updateCarBrandById(id, request)){
-            return new ResponseEntity<>("Updated !", HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCarBrand(@PathVariable("id") Long id){
+        CarBrandResponse carBrandResponse = _carBrandService.getCarBrandById(id);
+        if(carBrandResponse != null){
+            return new ResponseEntity<>(carBrandResponse, HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("Car doesn't exist.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Car brand doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCarBrand(@PathVariable("id") Long id, @RequestBody UpdateCarBrandRequest request){
+        TextResponse textResponse = new TextResponse();
+        textResponse.setText("Updated !");
+        if(_carBrandService.updateCarBrandById(id, request)){
+            return new ResponseEntity<>(textResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Car brand doesn't exist.", HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping()
     public CarBrandResponse createCarBrand(@RequestBody CreateCarBrandRequest request){
         return _carBrandService.createCarBrand(request);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCarBrand(@PathVariable("id") Long id){
+        TextResponse textResponse = new TextResponse();
+        textResponse.setText("Deleted !");
+        if(_carBrandService.deleteCarBrandById(id)){
+            return new ResponseEntity<>(textResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Car brand doesn't exist.", HttpStatus.NOT_FOUND);
+        }
     }
 }

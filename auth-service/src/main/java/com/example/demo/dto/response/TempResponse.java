@@ -7,12 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GearShiftTypeResponse {
-
-    private Long id;
-
-    private String type;
-
-    private int numberOfGears;
-
+public class TempResponse {
+    private String text;
 }

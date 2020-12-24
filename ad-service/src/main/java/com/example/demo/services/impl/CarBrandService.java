@@ -5,6 +5,7 @@ import com.example.demo.dto.request.UpdateCarBrandRequest;
 import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.entity.Car;
 import com.example.demo.entity.CarBrand;
+import com.example.demo.entity.CarClass;
 import com.example.demo.repository.ICarBrandRepository;
 import com.example.demo.services.ICarBrandService;
 import org.springframework.stereotype.Service;
@@ -32,16 +33,14 @@ public class CarBrandService implements ICarBrandService {
 
     @Override
     public boolean updateCarBrandById(Long id, UpdateCarBrandRequest request) {
-        boolean updated = false;
         CarBrand carBrand = _carBrandRepository.findOneById(id);
         if(carBrand != null) {
             carBrand.setCountry(request.getCountry());
             carBrand.setName(request.getName());
-            updated = true;
+            _carBrandRepository.save(carBrand);
+            return true;
         }
-        _carBrandRepository.save(carBrand);
-
-        return updated;
+        return false;
     }
 
     @Override
@@ -51,6 +50,25 @@ public class CarBrandService implements ICarBrandService {
         carBrand.setCountry(request.getCountry());
         CarBrand savedCarBrand = _carBrandRepository.save(carBrand);
         return mapCarBrandToCarBrandResponse(savedCarBrand);
+    }
+
+    @Override
+    public boolean deleteCarBrandById(Long id) {
+        CarBrand carBrand = _carBrandRepository.findOneById(id);
+        if(carBrand != null){
+            _carBrandRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public CarBrandResponse getCarBrandById(Long id) {
+        CarBrand carBrand = _carBrandRepository.findOneById(id);
+        if(carBrand != null) {
+            return mapCarBrandToCarBrandResponse(carBrand);
+        }
+        return null;
     }
 
     private CarBrandResponse mapCarBrandToCarBrandResponse(CarBrand carBrand) {

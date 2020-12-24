@@ -12,4 +12,8 @@ public interface ICarClassService {
     boolean updateCarClassById(Long id, UpdateCarClassRequest request);
 
     CarClassResponse createCarClass(CreateCarClassRequest request);
+
+    boolean deleteCarClassById(Long id);
+
+    CarClassResponse getCarClassById(Long id);
 }

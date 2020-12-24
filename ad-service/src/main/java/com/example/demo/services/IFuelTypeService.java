@@ -10,7 +10,11 @@ import java.util.List;
 public interface IFuelTypeService {
     List<FuelTypeResponse> getAllFuelTypes();
 
-    boolean updateCarClassById(Long id, UpdateFuelTypeRequest request);
+    boolean updateFuelTypeById(Long id, UpdateFuelTypeRequest request);
 
     FuelTypeResponse createFuelType(CreateFuelTypeRequest request);
+
+    boolean deleteFuelTypeById(Long id);
+
+    FuelTypeResponse getFuelTypeById(Long id);
 }

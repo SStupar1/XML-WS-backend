@@ -28,12 +28,12 @@ insert into authorities_permissions (authority_id, permission_id) values
 -- agent1@gmail.com -> Agent123!!!
 -- customer@gmail.com -> Customer123!!!
 -- customer1@gmail.com -> Customer123!!!
-insert into user_entity (id, username, password, deleted, has_signed_in, last_password_reset_date, user_role) values
-(1, 'admin@gmail.com', '$2y$10$UFTyoDVYFFUqlb0lnKfoKe7H/EbQOqZH.ZYHf6sOYiOWSRCmpcJ5K', false, false, '2020-01-01 10:10:11', 2),
-(2, 'agent@gmail.com', '$2a$10$zQU7XEdDSMvxt13Xkjs3X.CCY64edvCS0ZXcgqPtU8FhSYVUhtnau', false, false, '2020-01-01 10:10:12', 1),
-(3, 'agent1@gmail.com', '$2a$10$zQU7XEdDSMvxt13Xkjs3X.CCY64edvCS0ZXcgqPtU8FhSYVUhtnau', false, false, '2020-01-01 10:10:13', 1),
-(4, 'customer@gmail.com', '$2a$10$UJEbOrAMWN/bh8tEPHt.Z.fD2RX.T0e0MXNuZEFCEFTNAjHkdAVju', false, false, '2020-01-01 10:10:14', 0),
-(5, 'customer2@gmail.com', '$2a$10$UJEbOrAMWN/bh8tEPHt.Z.fD2RX.T0e0MXNuZEFCEFTNAjHkdAVju', false, false, '2020-01-01 10:10:15', 0);
+insert into user_entity (id, username, password, has_signed_in, last_password_reset_date, user_role) values
+(1, 'admin@gmail.com', '$2y$10$UFTyoDVYFFUqlb0lnKfoKe7H/EbQOqZH.ZYHf6sOYiOWSRCmpcJ5K', false, '2020-01-01 10:10:11', 2),
+(2, 'agent@gmail.com', '$2a$10$zQU7XEdDSMvxt13Xkjs3X.CCY64edvCS0ZXcgqPtU8FhSYVUhtnau', false, '2020-01-01 10:10:12', 1),
+(3, 'agent1@gmail.com', '$2a$10$zQU7XEdDSMvxt13Xkjs3X.CCY64edvCS0ZXcgqPtU8FhSYVUhtnau', false, '2020-01-01 10:10:13', 1),
+(4, 'customer@gmail.com', '$2a$10$UJEbOrAMWN/bh8tEPHt.Z.fD2RX.T0e0MXNuZEFCEFTNAjHkdAVju', false, '2020-01-01 10:10:14', 0),
+(5, 'customer2@gmail.com', '$2a$10$UJEbOrAMWN/bh8tEPHt.Z.fD2RX.T0e0MXNuZEFCEFTNAjHkdAVju', false, '2020-01-01 10:10:15', 0);
 
 insert into user_authority (user_id, authority_id) values
 (1, 1),
@@ -59,7 +59,7 @@ insert into agent (id, bank_account_number, date_founded, name, pib, user_id, ad
 (1, 'DE72 3702 0500 0009 7097 00', '2020/02/25', 'Marko Kraljevic',  '123-45-6789', 2, 'Svetislava Kasapinovica 3', null),
 (2, '0500 0009 3702 FE22 7097 00', '2020/02/25', 'Dragan Topalovic', '321-54-9876', 3, 'Knez Mihailova 15', null);
 
-insert into simple_user (id, address, first_name, last_name, request_status, ssn, user_id) values
-(1, 'Pionirska 26', 'Somi', 'Misoni', 'CONFIRMED', '1547854896523', 4),
-(2, 'Njegoseva 55', 'Didi', 'Mimica-Kostovic', 'CONFIRMED', '1547858576523', 5);
+insert into simple_user (id, address, first_name, last_name, request_status, ssn, user_id, deleted, num_of_ads) values
+(1, 'Pionirska 26', 'Somi', 'Misoni', 'CONFIRMED', '1547854896523', 4, false, 0),
+(2, 'Njegoseva 55', 'Didi', 'Mimica-Kostovic', 'CONFIRMED', '1547858576523', 5, true, 0);
 

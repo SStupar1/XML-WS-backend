@@ -38,9 +38,14 @@ public class SimpleUser{
 
     private String address;
 
+    private int numOfAds;
+
     @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
 
     private LocalDateTime confirmationTime;
+
+    private boolean deleted;
+
 
 }

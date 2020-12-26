@@ -85,6 +85,9 @@ public class AuthService implements IAuthService {
         if(user.getSimpleUser() != null && user.getSimpleUser().getRequestStatus().equals(RequestStatus.APPROVED)){
             throw new GeneralException("Your registration has been approved by admin. Please activate your account.", HttpStatus.BAD_REQUEST);
         }
+        if(user.getSimpleUser() != null && user.getSimpleUser().isDeleted()) {
+            throw new GeneralException("Your account is blocked by admin.", HttpStatus.BAD_REQUEST);
+        }
 
         String username = request.getUsername();
         String password = request.getPassword();
@@ -126,7 +129,6 @@ public class AuthService implements IAuthService {
         user.setUsername(request.getUsername());
         user.setPassword(_passwordEncoder.encode(request.getPassword()));
         user.setUserRole(UserRoles.SIMPLE_USER);
-        user.setDeleted(false);
         user.setHasSignedIn(false);
         List<Authority> authorities = new ArrayList<>();
         authorities.add(_authorityRepository.findOneByName("ROLE_SIMPLE_USER"));
@@ -137,6 +139,8 @@ public class AuthService implements IAuthService {
         simpleUser.setLastName(request.getLastName());
         simpleUser.setSsn(request.getSsn());
         simpleUser.setRequestStatus(RequestStatus.PENDING);
+        simpleUser.setDeleted(false);
+        simpleUser.setNumOfAds(0);
         SimpleUser savedSimpleUser = _simpleUserRepository.save(simpleUser);
         savedSimpleUser.setUser(user);
         user.setSimpleUser(savedSimpleUser);
@@ -160,7 +164,6 @@ public class AuthService implements IAuthService {
         user.setUsername(request.getUsername());
         user.setPassword(_passwordEncoder.encode(request.getPassword()));
         user.setUserRole(UserRoles.AGENT);
-        user.setDeleted(false);
         user.setHasSignedIn(false);
         List<Authority> authorities = new ArrayList<>();
         authorities.add(_authorityRepository.findOneByName("ROLE_AGENT"));

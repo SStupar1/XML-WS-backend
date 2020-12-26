@@ -27,7 +27,7 @@ public class Car {
     private CarModel carModel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "")
+    @JoinColumn(name = "fuel_type_id")
     private FuelType fuelType;
 
     @ManyToOne(fetch = FetchType.LAZY)

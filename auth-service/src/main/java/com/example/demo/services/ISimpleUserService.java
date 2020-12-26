@@ -20,4 +20,16 @@ public interface ISimpleUserService {
     void confirmRegistrationRequest(GetIdRequest request);
 
     void denyRegistrationRequest(GetIdRequest request);
+
+    void blockSimpleUser(GetIdRequest request);
+
+    List<SimpleUserResponse> getAllSimpleUsers();
+
+    List<SimpleUserResponse> getAllBlockedSimpleUsers();
+
+    void activateSimpleUser(GetIdRequest request);
+
+    boolean deleteSimpleUserById(Long id);
+
+    void increase(Long id);
 }

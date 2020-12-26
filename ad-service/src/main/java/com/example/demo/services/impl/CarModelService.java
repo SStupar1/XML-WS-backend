@@ -33,7 +33,7 @@ public class CarModelService implements ICarModelService {
     public List<CarModelResponse> getAllCarModels() {
         List<CarModel> carModels = _carModelRepository.findAll();
         return  carModels.stream()
-                .map(carBrand -> mapCarModelToCarModelResponse(carBrand))
+                .map(carModel -> mapCarModelToCarModelResponse(carModel))
                 .collect(Collectors.toList());
     }
 

@@ -4,7 +4,9 @@ import com.example.demo.dto.request.GetIdRequest;
 import com.example.demo.dto.request.UpdateSimpleUserRequest;
 import com.example.demo.dto.response.SimpleUserResponse;
 import com.example.demo.entity.SimpleUser;
+import com.example.demo.entity.User;
 import com.example.demo.repository.ISimpleUserRepository;
+import com.example.demo.repository.IUserRepository;
 import com.example.demo.services.IEmailService;
 import com.example.demo.services.ISimpleUserService;
 import com.example.demo.util.enums.RequestStatus;
@@ -20,9 +22,12 @@ public class SimpleUserService implements ISimpleUserService {
 
     private final IEmailService _emailService;
 
-    public SimpleUserService(ISimpleUserRepository simpleUserRepository, IEmailService emailService) {
+    private final IUserRepository _userRepository;
+
+    public SimpleUserService(ISimpleUserRepository simpleUserRepository, IEmailService emailService, IUserRepository userRepository) {
         _simpleUserRepository = simpleUserRepository;
         _emailService = emailService;
+        _userRepository = userRepository;
     }
 
 
@@ -87,6 +92,61 @@ public class SimpleUserService implements ISimpleUserService {
         _emailService.denyRegistrationMail(savedSimpleUser);
     }
 
+    @Override
+    public void blockSimpleUser(GetIdRequest request) {
+        SimpleUser simpleUser = _simpleUserRepository.findOneById(request.getId());
+        simpleUser.setDeleted(true);
+        _simpleUserRepository.save(simpleUser);
+    }
+
+    @Override
+    public List<SimpleUserResponse> getAllSimpleUsers() {
+        List<SimpleUser> simpleUsers = _simpleUserRepository.findAllByDeleted(false);
+        List<SimpleUserResponse> simpleUserResponses = new ArrayList<>();
+        for (SimpleUser simpleUser: simpleUsers) {
+            SimpleUserResponse simpleUserResponse = mapSimpleUserToResponse(simpleUser);
+            simpleUserResponses.add(simpleUserResponse);
+        }
+        return simpleUserResponses;
+    }
+
+    @Override
+    public List<SimpleUserResponse> getAllBlockedSimpleUsers() {
+        List<SimpleUser> simpleUsers = _simpleUserRepository.findAllByDeleted(true);
+        List<SimpleUserResponse> simpleUserResponses = new ArrayList<>();
+        for (SimpleUser simpleUser: simpleUsers) {
+            SimpleUserResponse simpleUserResponse = mapSimpleUserToResponse(simpleUser);
+            simpleUserResponses.add(simpleUserResponse);
+        }
+        return simpleUserResponses;
+    }
+
+    @Override
+    public void activateSimpleUser(GetIdRequest request) {
+        SimpleUser simpleUser = _simpleUserRepository.findOneById(request.getId());
+        simpleUser.setDeleted(false);
+        _simpleUserRepository.save(simpleUser);
+    }
+
+    @Override
+    public boolean deleteSimpleUserById(Long id) {
+        SimpleUser simpleUser = _simpleUserRepository.findOneById(id);
+        if(simpleUser != null){
+            User user = _userRepository.findOneById(simpleUser.getUser().getId());
+            user.setAuthorities(null);
+            _userRepository.deleteById(user.getId());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void increase(Long id) {
+        SimpleUser simpleUser = _simpleUserRepository.findOneById(id);
+        simpleUser.setNumOfAds(simpleUser.getNumOfAds() + 1);
+        _simpleUserRepository.save(simpleUser);
+    }
+
     private SimpleUserResponse mapSimpleUserToResponse(SimpleUser simpleUser){
         SimpleUserResponse simpleUserResponse = new SimpleUserResponse();
         simpleUserResponse.setId(simpleUser.getId());
@@ -96,6 +156,7 @@ public class SimpleUserService implements ISimpleUserService {
         simpleUserResponse.setSsn(simpleUser.getSsn());
         simpleUserResponse.setUsername(simpleUser.getUser().getUsername());
         simpleUserResponse.setUserRole(simpleUser.getUser().getUserRole().toString());
+        simpleUserResponse.setNumOfAds(simpleUser.getNumOfAds());
         return simpleUserResponse;
     }
 

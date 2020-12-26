@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.GetIdRequest;
 import com.example.demo.dto.request.UpdateSimpleUserRequest;
 import com.example.demo.dto.response.SimpleUserResponse;
+import com.example.demo.dto.response.TempResponse;
 import com.example.demo.services.ISimpleUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,16 @@ public class SimpleUserController {
 
     public SimpleUserController(ISimpleUserService simpleUserService) {
         _simpleUserService = simpleUserService;
+    }
+
+    @GetMapping()
+    public List<SimpleUserResponse> getAllSimpleUsers(){
+        return _simpleUserService.getAllSimpleUsers();
+    }
+
+    @GetMapping("/blocked")
+    public List<SimpleUserResponse> getAllBlockedSimpleUsers(){
+        return _simpleUserService.getAllBlockedSimpleUsers();
     }
 
     @GetMapping("/{id}")
@@ -61,6 +72,33 @@ public class SimpleUserController {
     @PutMapping("/confirm")
     public void confirmRegistrationRequest(@RequestBody GetIdRequest request){
         _simpleUserService.confirmRegistrationRequest(request);
+    }
+
+    @PutMapping("/block")
+    public void blockSimpleUser(@RequestBody GetIdRequest request){
+        _simpleUserService.blockSimpleUser(request);
+    }
+
+    @PutMapping("/activate")
+    public void activateSimpleUser(@RequestBody GetIdRequest request){
+        _simpleUserService.activateSimpleUser(request);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteSimpleUser(@PathVariable("id") Long id){
+        TempResponse temp = new TempResponse();
+        temp.setText("Deleted");
+        if(_simpleUserService.deleteSimpleUserById(id)){
+            return new ResponseEntity<>(temp, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Simple user doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}/increase")
+    void increaseNumOfAds(@PathVariable("id") Long id){
+        _simpleUserService.increase(id);
     }
 
 }

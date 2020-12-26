@@ -22,7 +22,9 @@ public class Ad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long agent; //id agenta ciji je oglas
+    private String name;
+
+    private Long publisher; //id agenta ili simple-usera ciji je oglas
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id", referencedColumnName = "id")
@@ -43,6 +45,8 @@ public class Ad {
 
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    private boolean simpleUser; //da li je publisher simple-user
 
     //slike
 }

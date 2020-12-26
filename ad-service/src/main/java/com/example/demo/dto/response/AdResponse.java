@@ -16,10 +16,6 @@ public class AdResponse {
 
     private String name;
 
-    private Agent agent;
-
-    private Long carId;
-
     private boolean limitedDistance;
 
     private int limitedKm;
@@ -29,5 +25,11 @@ public class AdResponse {
     private int seats;
 
     private LocalDate creationDate;
+
+    private Long publisherId;
+
+    private Long carId;
+
+    private boolean simpleUser;
 
 }

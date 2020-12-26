@@ -43,8 +43,6 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private SimpleUser simpleUser;
 
-    private boolean deleted;
-
     private boolean hasSignedIn;
 
     @Column(name = "last_password_reset_date")

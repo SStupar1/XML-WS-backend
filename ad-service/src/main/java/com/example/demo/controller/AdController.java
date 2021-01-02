@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.request.CreateAdRequest;
-import com.example.demo.dto.request.CreateCarRequest;
-import com.example.demo.dto.request.UpdateAdRequest;
-import com.example.demo.dto.request.UpdateCarModelRequest;
+import com.example.demo.dto.request.*;
 import com.example.demo.dto.response.AdResponse;
 import com.example.demo.dto.response.CarResponse;
 import com.example.demo.dto.response.TextResponse;
@@ -40,6 +37,11 @@ public class AdController {
         else{
             return new ResponseEntity<>("Advertisement doesn't exist.", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/publisher-ads/{id}")
+    public List<AdResponse> getAllPublisherAds(@PathVariable("id") Long id){
+        return _adService.getAllPublisherAds(id);
     }
 
     @PutMapping("/{id}")

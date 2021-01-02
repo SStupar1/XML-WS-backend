@@ -3,6 +3,7 @@ package com.example.demo.services.impl;
 import com.example.demo.client.AuthClient;
 import com.example.demo.dto.client.SimpleUser;
 import com.example.demo.dto.request.CreateAdRequest;
+import com.example.demo.dto.request.PublisherAdsRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
 import com.example.demo.dto.response.AdResponse;
 import com.example.demo.entity.*;
@@ -101,6 +102,16 @@ public class AdService implements IAdService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<AdResponse> getAllPublisherAds(Long id) {
+
+        List<Ad> ads = _adRepository.findAllByPublisher(id);
+
+        return  ads.stream()
+                .map(ad -> mapAdToAdResponse(ad))
+                .collect(Collectors.toList());
     }
 
     private AdResponse mapAdToAdResponse(Ad ad) {

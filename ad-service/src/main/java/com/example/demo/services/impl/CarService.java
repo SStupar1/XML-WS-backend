@@ -3,6 +3,7 @@ package com.example.demo.services.impl;
 import com.example.demo.dto.request.CreateCarRequest;
 import com.example.demo.dto.request.UpdateCarRequest;
 import com.example.demo.dto.response.CarResponse;
+import com.example.demo.entity.Ad;
 import com.example.demo.entity.Car;
 import com.example.demo.entity.CarModel;
 import com.example.demo.repository.ICarModelRepository;
@@ -12,7 +13,9 @@ import com.example.demo.repository.IGearshiftTypeRepository;
 import com.example.demo.services.ICarService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService implements ICarService {
@@ -70,6 +73,15 @@ public class CarService implements ICarService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<CarResponse> getAllCars() {
+        List<Car> cars = _carRepository.findAll();
+
+        return  cars.stream()
+                .map(car -> mapCarToResponse(car))
+                .collect(Collectors.toList());
     }
 
     private CarResponse mapCarToResponse(Car car) {

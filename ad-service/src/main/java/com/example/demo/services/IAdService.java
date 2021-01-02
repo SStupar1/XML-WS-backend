@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.request.CreateAdRequest;
+import com.example.demo.dto.request.PublisherAdsRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
 import com.example.demo.dto.response.AdResponse;
 
@@ -16,4 +17,6 @@ public interface IAdService {
     List<AdResponse> getAllAds();
 
     boolean updateAdById(Long id, UpdateAdRequest request);
+
+    List<AdResponse> getAllPublisherAds(Long id);
 }

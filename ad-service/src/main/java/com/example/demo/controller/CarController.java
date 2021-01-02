@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.CreateCarBrandRequest;
 import com.example.demo.dto.request.CreateCarRequest;
 import com.example.demo.dto.request.UpdateCarRequest;
+import com.example.demo.dto.response.AdResponse;
 import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarResponse;
 import com.example.demo.dto.response.TextResponse;
@@ -10,6 +11,8 @@ import com.example.demo.services.ICarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("cars")
@@ -20,6 +23,12 @@ public class CarController {
     public CarController(ICarService carService){
         _carService = carService;
     }
+
+    @GetMapping()
+    public List<CarResponse> getAllCars(){
+        return _carService.getAllCars();
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCar(@PathVariable("id") Long id){

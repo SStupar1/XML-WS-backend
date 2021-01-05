@@ -71,7 +71,7 @@ public class CarBrandService implements ICarBrandService {
         return null;
     }
 
-    private CarBrandResponse mapCarBrandToCarBrandResponse(CarBrand carBrand) {
+    public CarBrandResponse mapCarBrandToCarBrandResponse(CarBrand carBrand) {
         CarBrandResponse response = new CarBrandResponse();
         response.setId(carBrand.getId());
         response.setName(carBrand.getName());

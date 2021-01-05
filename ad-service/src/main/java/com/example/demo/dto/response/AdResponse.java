@@ -28,7 +28,7 @@ public class AdResponse {
 
     private Long publisherId;
 
-    private Long carId;
+    private CarResponse car;
 
     private boolean simpleUser;
 

@@ -69,7 +69,7 @@ public class GearshiftTypeService implements IGearshiftTypeService {
         return null;
     }
 
-    private GearshiftTypeResponse mapGearshiftTypeToGearshiftTypeRepository(GearshiftType gearshiftType) {
+    public GearshiftTypeResponse mapGearshiftTypeToGearshiftTypeRepository(GearshiftType gearshiftType) {
         GearshiftTypeResponse response = new GearshiftTypeResponse();
         response.setId(gearshiftType.getId());
         response.setType(gearshiftType.getType());

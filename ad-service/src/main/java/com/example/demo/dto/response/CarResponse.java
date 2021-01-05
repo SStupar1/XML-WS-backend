@@ -1,5 +1,4 @@
 package com.example.demo.dto.response;
-
 import lombok.*;
 
 @Data
@@ -11,10 +10,10 @@ public class CarResponse {
 
     private int kmTraveled;
 
-    private Long fuelTypeId;
+    private FuelTypeResponse fuelType;
 
-    private Long gearshiftTypeId;
+    private GearshiftTypeResponse gearshiftType;
 
-    private Long carModelId;
+    private CarModelResponse carModel;
 
 }

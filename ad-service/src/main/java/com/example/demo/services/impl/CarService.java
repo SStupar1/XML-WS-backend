@@ -2,10 +2,8 @@ package com.example.demo.services.impl;
 
 import com.example.demo.dto.request.CreateCarRequest;
 import com.example.demo.dto.request.UpdateCarRequest;
-import com.example.demo.dto.response.CarResponse;
-import com.example.demo.entity.Ad;
-import com.example.demo.entity.Car;
-import com.example.demo.entity.CarModel;
+import com.example.demo.dto.response.*;
+import com.example.demo.entity.*;
 import com.example.demo.repository.ICarModelRepository;
 import com.example.demo.repository.ICarRepository;
 import com.example.demo.repository.IFuelTypeRepository;
@@ -14,7 +12,6 @@ import com.example.demo.services.ICarService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,12 +21,18 @@ public class CarService implements ICarService {
     private final ICarModelRepository _carModelRepository;
     private final IFuelTypeRepository _fuelTypeRepository;
     private final IGearshiftTypeRepository _gearshiftTypeRepository;
+    private final FuelTypeService _fuelTypeService;
+    private final GearshiftTypeService _gearGearshiftTypeService;
+    private final CarModelService _carModelService;
 
-    public CarService(ICarRepository carRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiftTypeRepository){
+    public CarService(ICarRepository carRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiftTypeRepository, FuelTypeService fuelTypeService, GearshiftTypeService gearGearshiftTypeService, CarModelService carModelService){
         _carRepository = carRepository;
         _carModelRepository = carModelRepository;
         _fuelTypeRepository = fuelTypeRepository;
         _gearshiftTypeRepository = gearshiftTypeRepository;
+        _fuelTypeService = fuelTypeService;
+        _gearGearshiftTypeService = gearGearshiftTypeService;
+        _carModelService = carModelService;
     }
 
     @Override
@@ -84,13 +87,15 @@ public class CarService implements ICarService {
                 .collect(Collectors.toList());
     }
 
-    private CarResponse mapCarToResponse(Car car) {
+    public CarResponse mapCarToResponse(Car car) {
         CarResponse carResponse = new CarResponse();
         carResponse.setId(car.getId());
         carResponse.setKmTraveled(car.getKmTraveled());
-        carResponse.setCarModelId(car.getCarModel().getId());
-        carResponse.setFuelTypeId(car.getFuelType().getId());
-        carResponse.setGearshiftTypeId(car.getGearshiftType().getId());
+        carResponse.setCarModel(_carModelService.mapCarModelToCarModelResponse(car.getCarModel()));
+        carResponse.setFuelType(_fuelTypeService.mapFuelTypetoFuelTypeResponse(car.getFuelType()));
+        carResponse.setGearshiftType(_gearGearshiftTypeService.mapGearshiftTypeToGearshiftTypeRepository(car.getGearshiftType()));
+
         return carResponse;
     }
+
 }

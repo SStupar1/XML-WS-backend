@@ -3,9 +3,8 @@ package com.example.demo.services.impl;
 import com.example.demo.client.AuthClient;
 import com.example.demo.dto.client.SimpleUser;
 import com.example.demo.dto.request.CreateAdRequest;
-import com.example.demo.dto.request.PublisherAdsRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
-import com.example.demo.dto.response.AdResponse;
+import com.example.demo.dto.response.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.services.IAdService;
@@ -25,14 +24,16 @@ public class AdService implements IAdService {
     private final IGearshiftTypeRepository _gearshiftTypeRepository;
     private final ICarRepository _carRepository;
     private final AuthClient _authClient;
+    private final CarService _carService;
 
-    public AdService(IAdRepository adRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiTypeRepository, ICarRepository carRepository, AuthClient authClient){
+    public AdService(IAdRepository adRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiTypeRepository, ICarRepository carRepository, AuthClient authClient, CarService carService){
         _adRepository = adRepository;
         _carModelRepository = carModelRepository;
         _fuelTypeRepository = fuelTypeRepository;
         _gearshiftTypeRepository = gearshiTypeRepository;
         _carRepository = carRepository;
         _authClient = authClient;
+        _carService = carService;
     }
 
     @Override
@@ -114,12 +115,22 @@ public class AdService implements IAdService {
                 .collect(Collectors.toList());
     }
 
+
+    @Override
+    public AdResponse getAdById(Long id) {
+        Ad ad = _adRepository.findOneById(id);
+        if(ad != null) {
+            return mapAdToAdResponse(ad);
+        }
+        return null;
+    }
+
     private AdResponse mapAdToAdResponse(Ad ad) {
         AdResponse adResponse = new AdResponse();
         if(ad.getId() != null)
             adResponse.setId(ad.getId());
         if(ad.getCar() != null) {
-            adResponse.setCarId(ad.getCar().getId());
+            adResponse.setCar(_carService.mapCarToResponse(ad.getCar()));
         }
         if(ad.getPublisher() != null)
             adResponse.setPublisherId(ad.getPublisher());
@@ -137,12 +148,4 @@ public class AdService implements IAdService {
         return adResponse;
     }
 
-    @Override
-    public AdResponse getAdById(Long id) {
-        Ad ad = _adRepository.findOneById(id);
-        if(ad != null) {
-            return mapAdToAdResponse(ad);
-        }
-        return null;
-    }
 }

@@ -73,7 +73,7 @@ public class FuelTypeService implements IFuelTypeService {
         return null;
     }
 
-    private FuelTypeResponse mapFuelTypetoFuelTypeResponse(FuelType fuelType) {
+    public FuelTypeResponse mapFuelTypetoFuelTypeResponse(FuelType fuelType) {
         FuelTypeResponse response = new FuelTypeResponse();
         response.setId(fuelType.getId());
         response.setType(fuelType.getType());

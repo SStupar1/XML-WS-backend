@@ -2,7 +2,6 @@ package com.example.demo.services.impl;
 
 import com.example.demo.dto.request.CreateCarModelRequest;
 import com.example.demo.dto.request.UpdateCarModelRequest;
-import com.example.demo.dto.response.CarBrandResponse;
 import com.example.demo.dto.response.CarModelResponse;
 import com.example.demo.entity.CarBrand;
 import com.example.demo.entity.CarClass;
@@ -22,11 +21,15 @@ public class CarModelService implements ICarModelService {
     private final ICarModelRepository  _carModelRepository;
     private final ICarBrandRepository _carBrandRepository;
     private final ICarClassRepository _carClassRepository;
+    private final CarClassService _carCarClassService;
+    private final CarBrandService _carBrandService;
 
-    public CarModelService(ICarModelRepository carModelRepository, ICarBrandRepository carBrandRepository, ICarClassRepository carClassRepository){
+    public CarModelService(ICarModelRepository carModelRepository, ICarBrandRepository carBrandRepository, ICarClassRepository carClassRepository, CarClassService carCarClassService, CarBrandService carBrandService){
         _carModelRepository = carModelRepository;
         _carBrandRepository = carBrandRepository;
         _carClassRepository = carClassRepository;
+        _carCarClassService = carCarClassService;
+        _carBrandService = carBrandService;
     }
 
     @Override
@@ -82,13 +85,14 @@ public class CarModelService implements ICarModelService {
     }
 
 
-    private CarModelResponse mapCarModelToCarModelResponse(CarModel carModel) {
+    public CarModelResponse mapCarModelToCarModelResponse(CarModel carModel) {
         CarModelResponse response = new CarModelResponse();
         response.setId(carModel.getId());
         response.setName(carModel.getName());
-        response.setCarBrandId(carModel.getCarBrand().getId());
-        response.setCarClassId(carModel.getCarClass().getId());
+        response.setCarClass(_carCarClassService.mapCarClassToCarClassResponse(carModel.getCarClass()));
+        response.setCarBrand(_carBrandService.mapCarBrandToCarBrandResponse(carModel.getCarBrand()));
         return response;
     }
+
 
 }

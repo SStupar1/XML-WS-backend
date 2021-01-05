@@ -13,8 +13,8 @@ public class CarModelResponse {
 
     private String name;
 
-    private Long carClassId;
+    private CarClassResponse carClass;
 
-    private Long carBrandId;
+    private CarBrandResponse carBrand;
 
 }

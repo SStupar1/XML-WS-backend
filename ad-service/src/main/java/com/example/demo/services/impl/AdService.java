@@ -1,6 +1,7 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.client.AuthClient;
+import com.example.demo.dto.client.Agent;
 import com.example.demo.dto.client.SimpleUser;
 import com.example.demo.dto.request.CreateAdRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
@@ -9,6 +10,7 @@ import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.services.IAdService;
 import com.example.demo.util.GeneralException;
+import com.netflix.ribbon.proxy.annotation.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -37,19 +39,7 @@ public class AdService implements IAdService {
     }
 
     @Override
-    public boolean deleteAdById(Long id) {
-        Ad ad = _adRepository.findOneById(id);
-        if(ad != null){
-            Car car = _carRepository.findOneById(ad.getCar().getId());
-            _carRepository.deleteById(car.getId());
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public AdResponse createAd(CreateAdRequest request) {
-
         if(request.isSimpleUser()) {
             SimpleUser simpleUser = _authClient.getSimpleUser(request.getPublisherId());
             if (simpleUser.getNumOfAds() >= 3) {
@@ -125,27 +115,32 @@ public class AdService implements IAdService {
         return null;
     }
 
+    @Override
+    public boolean deleteAdById(Long id) {
+        Ad ad = _adRepository.findOneById(id);
+        if(ad != null){
+            Car car = _carRepository.findOneById(ad.getCar().getId());
+            _carRepository.deleteById(car.getId());
+            return true;
+        }
+        return false;
+    }
+
     private AdResponse mapAdToAdResponse(Ad ad) {
         AdResponse adResponse = new AdResponse();
-        if(ad.getId() != null)
-            adResponse.setId(ad.getId());
-        if(ad.getCar() != null) {
-            adResponse.setCar(_carService.mapCarToResponse(ad.getCar()));
-        }
-        if(ad.getPublisher() != null)
-            adResponse.setPublisherId(ad.getPublisher());
-        if(ad.getCreationDate() != null)
-            adResponse.setCreationDate(ad.getCreationDate());
-        if(ad.getName() != null)
-            adResponse.setName(ad.getName());
+        adResponse.setId(ad.getId());
+        adResponse.setCar(_carService.mapCarToResponse(ad.getCar()));
+        adResponse.setCreationDate(ad.getCreationDate());
+        adResponse.setName(ad.getName());
+        adResponse.setPublisherId(ad.getPublisher());
         adResponse.setLimitedKm(ad.getLimitedKm());
         adResponse.setSeats(ad.getSeats());
         adResponse.setCdw(ad.isCdw());
         adResponse.setLimitedDistance(ad.isLimitedDistance());
         adResponse.setSimpleUser(ad.isSimpleUser());
-
-
         return adResponse;
     }
+
+
 
 }

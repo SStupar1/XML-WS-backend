@@ -1,6 +1,5 @@
 package com.example.demo.dto.response;
 
-import com.example.demo.dto.client.Agent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,10 +25,10 @@ public class AdResponse {
 
     private LocalDate creationDate;
 
-    private Long publisherId;
-
     private CarResponse car;
 
     private boolean simpleUser;
+
+    private Long publisherId;
 
 }

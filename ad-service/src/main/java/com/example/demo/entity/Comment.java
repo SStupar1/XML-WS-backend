@@ -21,9 +21,8 @@ public class Comment {
 
     private String comment;
 
-    private Long simpleUser;
-
-    private Long agent;
+    private Long publisherId;
+    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_id")
@@ -31,6 +30,8 @@ public class Comment {
 
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
+
+    private boolean simpleUser;
 
 
 }

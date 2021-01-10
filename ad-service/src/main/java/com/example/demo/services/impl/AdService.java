@@ -125,7 +125,7 @@ public class AdService implements IAdService {
         return null;
     }
 
-    private AdResponse mapAdToAdResponse(Ad ad) {
+    public AdResponse mapAdToAdResponse(Ad ad) {
         AdResponse adResponse = new AdResponse();
         if(ad.getId() != null)
             adResponse.setId(ad.getId());

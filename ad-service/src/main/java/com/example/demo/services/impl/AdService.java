@@ -1,7 +1,6 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.client.AuthClient;
-import com.example.demo.dto.client.Agent;
 import com.example.demo.dto.client.SimpleUser;
 import com.example.demo.dto.request.CreateAdRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
@@ -10,7 +9,6 @@ import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.services.IAdService;
 import com.example.demo.util.GeneralException;
-import com.netflix.ribbon.proxy.annotation.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -126,7 +124,7 @@ public class AdService implements IAdService {
         return false;
     }
 
-    private AdResponse mapAdToAdResponse(Ad ad) {
+    public AdResponse mapAdToAdResponse(Ad ad) {
         AdResponse adResponse = new AdResponse();
         adResponse.setId(ad.getId());
         adResponse.setCar(_carService.mapCarToResponse(ad.getCar()));

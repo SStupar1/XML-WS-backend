@@ -79,3 +79,10 @@ insert into ad(id, publisher ,car_id, limited_distance, limited_km, cdw, seats, 
 (8, 2, 7, false, 0, false, 4, '2020-04-21', true, 'Reno Clio Hatchback'),
 (9, 2, 2, true, 150, true, 2, '2020-04-22', false, 'Toyota Yaris City'),
 (10, 2, 6, true, 30, false, 4, '2020-12-01', false, 'Audi R8 Coupe');
+
+insert into comment(id, comment, publisher_id, simple_user, ad_id) values
+    (1, "Prvi komentar", 2, true, 1),
+    (2, "Drugi komentar", 1, true, 4),
+    (3, "Treci komentar", 4, false, 5);
+
+

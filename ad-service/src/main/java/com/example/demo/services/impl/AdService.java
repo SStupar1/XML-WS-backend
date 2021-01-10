@@ -1,6 +1,7 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.client.AuthClient;
+import com.example.demo.dto.client.Agent;
 import com.example.demo.dto.client.SimpleUser;
 import com.example.demo.dto.request.CreateAdRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
@@ -130,14 +131,32 @@ public class AdService implements IAdService {
         adResponse.setCar(_carService.mapCarToResponse(ad.getCar()));
         adResponse.setCreationDate(ad.getCreationDate());
         adResponse.setName(ad.getName());
-        adResponse.setPublisherId(ad.getPublisher());
         adResponse.setLimitedKm(ad.getLimitedKm());
         adResponse.setSeats(ad.getSeats());
         adResponse.setCdw(ad.isCdw());
         adResponse.setLimitedDistance(ad.isLimitedDistance());
         adResponse.setSimpleUser(ad.isSimpleUser());
+        PublisherResponse publisherResponse = new PublisherResponse();
+        if(ad.isSimpleUser()){
+            SimpleUser simpleUser = _authClient.getSimpleUser(ad.getPublisher());
+            publisherResponse.setId(simpleUser.getId());
+            publisherResponse.setAddress(simpleUser.getAddress());
+            publisherResponse.setFirstName(simpleUser.getFirstName());
+            publisherResponse.setLastName(simpleUser.getLastName());
+            publisherResponse.setNumOfAds(simpleUser.getNumOfAds());
+            publisherResponse.setUsername(simpleUser.getUsername());
+            publisherResponse.setSsn(simpleUser.getSsn());
+        }else{
+            Agent agent = _authClient.getAgent(ad.getPublisher());
+            publisherResponse.setAddress(agent.getAddress());
+            publisherResponse.setName(agent.getName());
+            publisherResponse.setDateFounded(agent.getDateFounded());
+            publisherResponse.setId(agent.getId());
+        }
+        adResponse.setPublisher(publisherResponse);
         return adResponse;
     }
+
 
 
 

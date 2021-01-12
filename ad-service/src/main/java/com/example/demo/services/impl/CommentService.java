@@ -72,7 +72,7 @@ public class CommentService implements ICommentService {
             Agent agent = _authClient.getAgent(request.getUserId());
             Comment comment = new Comment();
             comment.setComment(request.getComment());
-            comment.setId(request.getUserId());
+          //  comment.setId(request.getUserId());
             comment.setAd(ad);
             comment.setSimpleUser(request.isSimpleUser());
             Comment savedComment = _commentRepository.save(comment);

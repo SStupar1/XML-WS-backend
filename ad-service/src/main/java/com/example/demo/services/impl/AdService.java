@@ -152,6 +152,7 @@ public class AdService implements IAdService {
             publisherResponse.setName(agent.getName());
             publisherResponse.setDateFounded(agent.getDateFounded());
             publisherResponse.setId(agent.getId());
+            publisherResponse.setBankAccountNumber(agent.getBankAccountNumber());
         }
         adResponse.setPublisher(publisherResponse);
         return adResponse;

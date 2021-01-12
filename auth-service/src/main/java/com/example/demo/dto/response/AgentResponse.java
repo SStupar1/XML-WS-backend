@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -16,7 +17,7 @@ public class AgentResponse {
     private String userRole;
     private String name;
     private String pib;
-    private Date dateFounded;
+    private LocalDate dateFounded;
     private String bankAccountNumber;
     private String address;
     private Long simpleUserId;

@@ -2,15 +2,16 @@ package com.example.demo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
-import java.util.*;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Agent{
 
     @Id
@@ -26,7 +27,7 @@ public class Agent{
 
     private String pib;
 
-    private Date dateFounded;
+    private LocalDate dateFounded;
 
     private String bankAccountNumber;
 
@@ -34,7 +35,4 @@ public class Agent{
 
     private Long simpleUserId;
 
-    public Agent() {
-        this.dateFounded = new Date();
-    }
 }

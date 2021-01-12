@@ -3,7 +3,7 @@ package com.example.demo.dto.client;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +14,10 @@ public class Agent {
 
     private String name;
 
-    private Date dateFounded;
+    private LocalDate dateFounded;
 
     private String address;
+
+    private String bankAccountNumber;
 
 }

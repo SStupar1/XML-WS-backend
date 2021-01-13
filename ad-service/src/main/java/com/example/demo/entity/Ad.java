@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -49,4 +50,6 @@ public class Ad {
     private boolean simpleUser; //da li je publisher simple-user
 
     //slike
+    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Picture> adPictures;
 }

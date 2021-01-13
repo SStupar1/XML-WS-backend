@@ -13,6 +13,7 @@ import com.example.demo.repository.IFuelTypeRepository;
 import com.example.demo.services.IFuelTypeService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,9 +68,15 @@ public class FuelTypeService implements IFuelTypeService {
     @Override
     public FuelTypeResponse getFuelTypeById(Long id) {
         FuelType fuelType =  _fuelTypeRepository.findOneById(id);
+        Date date = new Date(2021, 9, 14, 18, 10);
+        System.out.println(date);
+        date.setYear(date.getYear()+1900);
+        date.setMonth(date.getMonth()-1);
+        System.out.println(date);
         if(fuelType != null) {
             return mapFuelTypetoFuelTypeResponse(fuelType);
         }
+
         return null;
     }
 

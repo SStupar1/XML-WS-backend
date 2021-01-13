@@ -2,13 +2,17 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.request.*;
 import com.example.demo.dto.response.AdResponse;
-import com.example.demo.dto.response.CarResponse;
+import com.example.demo.dto.response.PictureResponse;
 import com.example.demo.dto.response.TextResponse;
+import com.example.demo.entity.Picture;
 import com.example.demo.services.IAdService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,10 +72,25 @@ public class AdController {
         }
     }
 
-
     @PostMapping()
-    public AdResponse createAd(@RequestBody CreateAdRequest request){
-        return _adService.createAd(request);
+    public AdResponse createAd(List<MultipartFile> fileList, @RequestBody CreateAdRequest request) throws Exception{
+        return _adService.createAd(fileList, request);
     }
 
+    @GetMapping("/{id}/picture" )
+    public ResponseEntity<PictureResponse> getPicture(@PathVariable("id") Long adId) {
+        return new ResponseEntity<>(_adService.getPicture(adId), HttpStatus.OK);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
+        System.out.println("Original Image Byte Size - " + file.getBytes().length);
+        _adService.uploadPicture(file);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/get/{imageName}")
+    public PictureResponse getImage(@PathVariable("imageName") String imageName) throws IOException {
+        return _adService.getImage(imageName);
+    }
 }

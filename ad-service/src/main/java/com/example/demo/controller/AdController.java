@@ -4,17 +4,14 @@ import com.example.demo.dto.request.*;
 import com.example.demo.dto.response.AdResponse;
 import com.example.demo.dto.response.PictureResponse;
 import com.example.demo.dto.response.TextResponse;
-import com.example.demo.entity.Picture;
 import com.example.demo.services.IAdService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("ads")
@@ -43,9 +40,9 @@ public class AdController {
         }
     }
 
-    @GetMapping("/publisher-ads/{id}")
-    public List<AdResponse> getAllPublisherAds(@PathVariable("id") Long id){
-        return _adService.getAllPublisherAds(id);
+    @GetMapping("/publisher-ads/{id}/{publisher}")
+    public List<AdResponse> getAllPublisherAds(@PathVariable("id") Long id, @PathVariable("publisher") boolean request){
+        return _adService.getAllPublisherAds(id,request);
     }
 
     @PutMapping("/{id}")
@@ -72,8 +69,10 @@ public class AdController {
         }
     }
 
-    @PostMapping()
-    public AdResponse createAd(List<MultipartFile> fileList, @RequestBody CreateAdRequest request) throws Exception{
+    @PostMapping(consumes = { "multipart/form-data" })
+    public AdResponse createAd(@RequestPart("imageFile") List<MultipartFile> fileList, @RequestPart("request") CreateAdRequest request) throws Exception{
+        System.out.println(fileList);
+        System.out.println(request.getSeats());
         return _adService.createAd(fileList, request);
     }
 
@@ -89,8 +88,8 @@ public class AdController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/get/{imageName}")
-    public PictureResponse getImage(@PathVariable("imageName") String imageName) throws IOException {
-        return _adService.getImage(imageName);
+    @GetMapping("/get/{id}")
+    public PictureResponse getImage(@PathVariable("id") Long id) throws IOException {
+        return _adService.getImage(id);
     }
 }

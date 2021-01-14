@@ -60,6 +60,6 @@ insert into agent (id, bank_account_number, date_founded, name, pib, user_id, ad
 (2, '0500 0009 3702 FE22 7097 00', '2020-02-25', 'Dragan Topalovic', '321-54-9876', 3, 'Knez Mihailova 15', null);
 
 insert into simple_user (id, address, first_name, last_name, request_status, ssn, user_id, deleted, num_of_ads) values
-(1, 'Pionirska 26', 'Somi', 'Misoni', 'CONFIRMED', '1547854896523', 4, false, 2),
-(2, 'Njegoseva 55', 'Didi', 'Mimica-Kostovic', 'CONFIRMED', '1547858576523', 5, true, 3);
+(1, 'Pionirska 26', 'Somi', 'Misoni', 'CONFIRMED', '1547854896523', 4, false, 0),
+(2, 'Njegoseva 55', 'Didi', 'Mimica-Kostovic', 'CONFIRMED', '1547858576523', 5, true, 0);
 

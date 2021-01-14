@@ -4,7 +4,6 @@ import com.example.demo.dto.request.CreateAdRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
 import com.example.demo.dto.response.AdResponse;
 import com.example.demo.dto.response.PictureResponse;
-import com.example.demo.entity.Picture;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ public interface IAdService {
 
     boolean updateAdById(Long id, UpdateAdRequest request);
 
-    List<AdResponse> getAllPublisherAds(Long id);
+    List<AdResponse> getAllPublisherAds(Long id, boolean request);
 
     PictureResponse getPicture(Long adId);
 
@@ -30,5 +29,5 @@ public interface IAdService {
 
     void uploadPicture(MultipartFile file) throws IOException;
 
-    PictureResponse getImage(String imageName);
+    PictureResponse getImage(Long id);
 }

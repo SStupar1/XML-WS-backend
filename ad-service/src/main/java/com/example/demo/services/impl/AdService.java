@@ -115,11 +115,15 @@ public class AdService implements IAdService {
     }
 
     @Override
-    public List<AdResponse> getAllPublisherAds(Long id) {
-
+    public List<AdResponse> getAllPublisherAds(Long id, boolean request) {
         List<Ad> ads = _adRepository.findAllByPublisher(id);
-
-        return  ads.stream()
+        List<Ad> filteredAds = new ArrayList<>();
+        for(Ad a: ads) {
+            if(a.isSimpleUser() == request){
+                filteredAds.add(a);
+            }
+        }
+        return  filteredAds.stream()
                 .map(ad -> mapAdToAdResponse(ad))
                 .collect(Collectors.toList());
     }
@@ -181,8 +185,8 @@ public class AdService implements IAdService {
     }
 
     @Override
-    public PictureResponse getImage(String imageName) {
-        Picture retrievedImage = _pictureRepository.findByName(imageName);
+    public PictureResponse getImage(Long id) {
+        Picture retrievedImage = _pictureRepository.findOneById(id);
         Picture img = new Picture(retrievedImage.getName(), retrievedImage.getType(),
                 decompressBytes(retrievedImage.getPicByte()));
         return mapToPictureResponse(img);
@@ -218,6 +222,14 @@ public class AdService implements IAdService {
             publisherResponse.setBankAccountNumber(agent.getBankAccountNumber());
         }
         adResponse.setPublisher(publisherResponse);
+        if(ad.getAdPictures() != null){
+            List<PictureResponse> pictures = new ArrayList<>();
+            for(Picture pic: ad.getAdPictures()){
+                PictureResponse pictureResponse = mapToPictureResponse(pic);
+                pictures.add(pictureResponse);
+            }
+            adResponse.setPictures(pictures);
+        }
         return adResponse;
     }
 

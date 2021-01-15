@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "ad-service")
 public interface AdClient {
 
-    @GetMapping("/ads")
+    @GetMapping("/ads/{id}")
     Ad getAd(@PathVariable("id") Long id);
 
 

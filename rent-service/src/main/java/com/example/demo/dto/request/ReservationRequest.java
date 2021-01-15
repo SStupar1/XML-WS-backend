@@ -10,9 +10,9 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class ReservationRequest {
-    private Long adID;
+    private Long adId;
 
-    private Long customerID;
+    private Long customerId;
 
     private LocalDate fromDate;
 
@@ -21,5 +21,7 @@ public class ReservationRequest {
     private LocalTime fromTime;
 
     private LocalTime toTime;
+
+    private boolean simpleUser;
 
 }

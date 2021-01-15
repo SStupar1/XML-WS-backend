@@ -1,6 +1,7 @@
 package com.example.demo.dto.response;
 
 import com.example.demo.dto.client.Ad;
+import com.example.demo.util.enums.ReservationStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,4 +24,8 @@ public class ReservationResponse {
     private LocalTime fromTime;
 
     private LocalTime toTime;
+
+    private boolean simpleUser;
+
+    private ReservationStatus status;
 }

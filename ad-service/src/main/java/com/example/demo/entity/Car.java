@@ -36,8 +36,4 @@ public class Car {
     private GearshiftType gearshiftType;
 
     private int kmTraveled; //predjena kilometraza
-
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Reservation> reservations;
-
 }

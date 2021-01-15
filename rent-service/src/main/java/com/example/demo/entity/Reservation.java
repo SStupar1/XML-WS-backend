@@ -28,13 +28,19 @@ public class Reservation {
     private LocalTime toTime;
 
     @Column(name = "customer_id")
-    private Long customerID;
+    private Long customerId;
 
     @Column(name = "ad_id")
-    private Long adID;
+    private Long adId;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bundle_id")
+    private Bundle bundle;
+
+    private boolean simpleUser;
 
 
 }

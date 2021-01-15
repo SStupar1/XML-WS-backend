@@ -159,6 +159,7 @@ public class AdService implements IAdService {
 
     private PictureResponse mapToPictureResponse(Picture decompressedPicture) {
         PictureResponse pictureResponse = new PictureResponse();
+        pictureResponse.setId(decompressedPicture.getId());
         pictureResponse.setName(decompressedPicture.getName());
         pictureResponse.setType(decompressedPicture.getType());
         pictureResponse.setPicByte(decompressedPicture.getPicByte());

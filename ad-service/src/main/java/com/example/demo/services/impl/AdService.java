@@ -12,9 +12,15 @@ import com.example.demo.services.IAdService;
 import com.example.demo.util.GeneralException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 @Service
 public class AdService implements IAdService {
@@ -26,8 +32,9 @@ public class AdService implements IAdService {
     private final ICarRepository _carRepository;
     private final AuthClient _authClient;
     private final CarService _carService;
+    private final IPictureRepository _pictureRepository;
 
-    public AdService(IAdRepository adRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiTypeRepository, ICarRepository carRepository, AuthClient authClient, CarService carService){
+    public AdService(IAdRepository adRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiTypeRepository, ICarRepository carRepository, AuthClient authClient, CarService carService, IPictureRepository pictureRepository){
         _adRepository = adRepository;
         _carModelRepository = carModelRepository;
         _fuelTypeRepository = fuelTypeRepository;
@@ -35,10 +42,12 @@ public class AdService implements IAdService {
         _carRepository = carRepository;
         _authClient = authClient;
         _carService = carService;
+        _pictureRepository = pictureRepository;
     }
 
+
     @Override
-    public AdResponse createAd(CreateAdRequest request) {
+    public AdResponse createAd(List<MultipartFile> fileList, CreateAdRequest request) throws GeneralException, IOException {
         if(request.isSimpleUser()) {
             SimpleUser simpleUser = _authClient.getSimpleUser(request.getPublisherId());
             if (simpleUser.getNumOfAds() >= 3) {
@@ -65,6 +74,17 @@ public class AdService implements IAdService {
         ad.setSeats(request.getSeats());
         ad.setPublisher(request.getPublisherId());
         ad.setSimpleUser(request.isSimpleUser());
+        List<Picture> pictures = new ArrayList<>();
+        for (MultipartFile file : fileList) {
+            Picture picture = new Picture();
+            picture.setAd(ad);
+            picture.setName(file.getOriginalFilename());
+            picture.setType(file.getContentType());
+            picture.setPicByte(compressBytes(file.getBytes()));
+            pictures.add(picture);
+            _pictureRepository.save(picture);
+        }
+        ad.setAdPictures(pictures);
         _adRepository.save(ad);
 
         return mapAdToAdResponse(ad);
@@ -95,11 +115,15 @@ public class AdService implements IAdService {
     }
 
     @Override
-    public List<AdResponse> getAllPublisherAds(Long id) {
-
+    public List<AdResponse> getAllPublisherAds(Long id, boolean request) {
         List<Ad> ads = _adRepository.findAllByPublisher(id);
-
-        return  ads.stream()
+        List<Ad> filteredAds = new ArrayList<>();
+        for(Ad a: ads) {
+            if(a.isSimpleUser() == request){
+                filteredAds.add(a);
+            }
+        }
+        return  filteredAds.stream()
                 .map(ad -> mapAdToAdResponse(ad))
                 .collect(Collectors.toList());
     }
@@ -123,6 +147,50 @@ public class AdService implements IAdService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public PictureResponse getPicture(Long adId) {
+        Ad ad = _adRepository.findOneById(adId);
+        Picture picture = ad.getAdPictures().iterator().next();
+        Picture decompressedPicture = new Picture(picture.getName(), picture.getType(), decompressBytes(picture.getPicByte()), ad);
+        return mapToPictureResponse(decompressedPicture);
+    }
+
+    private PictureResponse mapToPictureResponse(Picture decompressedPicture) {
+        PictureResponse pictureResponse = new PictureResponse();
+        pictureResponse.setId(decompressedPicture.getId());
+        pictureResponse.setName(decompressedPicture.getName());
+        pictureResponse.setType(decompressedPicture.getType());
+        pictureResponse.setPicByte(decompressedPicture.getPicByte());
+        return pictureResponse;
+    }
+
+    @Override
+    public List<PictureResponse> getAllPictures(Long adID){
+        List<PictureResponse> pictureResponses = new ArrayList<>();
+        Ad ad = _adRepository.findOneById(adID);
+        List<Picture> pictures = ad.getAdPictures();
+        for(Picture picture : pictures){
+            Picture decompressedPicture = new Picture(picture.getName(), picture.getType(), decompressBytes(picture.getPicByte()), ad);
+            pictureResponses.add(mapToPictureResponse(decompressedPicture));
+        }
+        return pictureResponses;
+    }
+
+    @Override
+    public void uploadPicture(MultipartFile file) throws IOException {
+        Picture img = new Picture(file.getOriginalFilename(), file.getContentType(),
+                compressBytes(file.getBytes()));
+        _pictureRepository.save(img);
+    }
+
+    @Override
+    public PictureResponse getImage(Long id) {
+        Picture retrievedImage = _pictureRepository.findOneById(id);
+        Picture img = new Picture(retrievedImage.getName(), retrievedImage.getType(),
+                decompressBytes(retrievedImage.getPicByte()));
+        return mapToPictureResponse(img);
     }
 
     public AdResponse mapAdToAdResponse(Ad ad) {
@@ -155,8 +223,52 @@ public class AdService implements IAdService {
             publisherResponse.setBankAccountNumber(agent.getBankAccountNumber());
         }
         adResponse.setPublisher(publisherResponse);
+        if(ad.getAdPictures() != null){
+            List<PictureResponse> pictures = new ArrayList<>();
+            for(Picture pic: ad.getAdPictures()){
+                PictureResponse pictureResponse = mapToPictureResponse(pic);
+                pictures.add(pictureResponse);
+            }
+            adResponse.setPictures(pictures);
+        }
         return adResponse;
     }
+
+    public static byte[] compressBytes(byte[] data) {
+        Deflater deflater = new Deflater();
+        deflater.setInput(data);
+        deflater.finish();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+        byte[] buffer = new byte[1024];
+        while (!deflater.finished()) {
+            int count = deflater.deflate(buffer);
+            outputStream.write(buffer, 0, count);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+        }
+        System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
+        return outputStream.toByteArray();
+    }
+
+    public static byte[] decompressBytes(byte[] data) {
+        Inflater inflater = new Inflater();
+        inflater.setInput(data);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+        byte[] buffer = new byte[1024];
+        try {
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+                outputStream.write(buffer, 0, count);
+            }
+            outputStream.close();
+        } catch (IOException ioe) {
+        } catch (DataFormatException e) {
+        }
+        return outputStream.toByteArray();
+    }
+
 
 
 

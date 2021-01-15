@@ -2,18 +2,12 @@ package com.example.demo.services.impl;
 
 import com.example.demo.dto.request.CreateFuelTypeRequest;
 import com.example.demo.dto.request.UpdateFuelTypeRequest;
-import com.example.demo.dto.response.CarBrandResponse;
-import com.example.demo.dto.response.CarModelResponse;
 import com.example.demo.dto.response.FuelTypeResponse;
-import com.example.demo.entity.CarBrand;
-import com.example.demo.entity.CarModel;
 import com.example.demo.entity.FuelType;
-import com.example.demo.repository.ICarModelRepository;
 import com.example.demo.repository.IFuelTypeRepository;
 import com.example.demo.services.IFuelTypeService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +22,6 @@ public class FuelTypeService implements IFuelTypeService {
 
     @Override
     public List<FuelTypeResponse> getAllFuelTypes() {
-        LocalDateTime datetime1 = LocalDateTime.now();
-        System.out.println(datetime1 );
         List<FuelType> fuelTypes = _fuelTypeRepository.findAll();
         return  fuelTypes.stream()
                 .map(fuelType -> mapFuelTypetoFuelTypeResponse(fuelType))
@@ -73,6 +65,7 @@ public class FuelTypeService implements IFuelTypeService {
         if(fuelType != null) {
             return mapFuelTypetoFuelTypeResponse(fuelType);
         }
+
         return null;
     }
 

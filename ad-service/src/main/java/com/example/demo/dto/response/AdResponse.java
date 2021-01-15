@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -31,5 +32,7 @@ public class AdResponse {
     private boolean simpleUser;
 
     private PublisherResponse publisher;
+
+    private List<PictureResponse> pictures;
 
 }

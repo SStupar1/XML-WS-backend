@@ -87,5 +87,6 @@ insert into comment(id, comment, publisher_id, simple_user, ad_id) values
 
 insert into rating(id, grade, simple_user, ad_id) values
     (1, 3.4, 1, 1),
-    (2, 5.0, 2, 2)
+    (2, 5.0, 2, 2);
+
 

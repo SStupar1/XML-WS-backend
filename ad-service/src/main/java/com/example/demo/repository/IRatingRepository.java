@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface IRatingRepository extends JpaRepository<Rating, Long> {
-    List<Rating> findAllByAdId(Long id);
+    List<Rating> findAllByAd_Id(Long id);
 }

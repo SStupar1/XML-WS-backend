@@ -43,7 +43,7 @@ public class CommentService implements ICommentService {
 
     @Override
     public CommentResponse getAdById(Long id) {
-        Comment comment = _commentRepository.findOneById(id);
+        Comment comment = _commentRepository.findAllByAd_Id(id);
         if(comment != null) {
             return mapCommentToCommentResponse(comment);
         }

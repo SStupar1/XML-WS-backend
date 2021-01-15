@@ -30,7 +30,7 @@ public class RatingService implements IRatingService {
 
     @Override
     public List<RatingResponse> getAllRatingsByAd(Long id) {
-        List<Rating> ratings = _ratingRepository.findAllByAdId(id);
+        List<Rating> ratings = _ratingRepository.findAllByAd_Id(id);
         return ratings.stream()
                 .map(rating -> mapRatingToRatingResponse(rating))
                 .collect(Collectors.toList());
@@ -53,7 +53,7 @@ public class RatingService implements IRatingService {
 
     @Override
     public AverageRatingResponse getAverageRatingByAd(Long id) {
-        List<Rating> ratings = _ratingRepository.findAllByAdId(id);
+        List<Rating> ratings = _ratingRepository.findAllByAd_Id(id);
         double sum = 0;
         double counter = 0;
         for(Rating r: ratings){

@@ -13,6 +13,7 @@ import com.example.demo.repository.IFuelTypeRepository;
 import com.example.demo.services.IFuelTypeService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,8 @@ public class FuelTypeService implements IFuelTypeService {
 
     @Override
     public List<FuelTypeResponse> getAllFuelTypes() {
+        LocalDateTime datetime1 = LocalDateTime.now();
+        System.out.println(datetime1 );
         List<FuelType> fuelTypes = _fuelTypeRepository.findAll();
         return  fuelTypes.stream()
                 .map(fuelType -> mapFuelTypetoFuelTypeResponse(fuelType))

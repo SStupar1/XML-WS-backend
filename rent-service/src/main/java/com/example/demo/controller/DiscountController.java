@@ -31,6 +31,7 @@ public class DiscountController {
         }
     }
 
+
     @GetMapping()
     public List<DiscountResponse> getAllDiscounts(){
         return _discountService.getAllDiscounts();

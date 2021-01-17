@@ -11,7 +11,7 @@ public class CreatePricelistRequest {
 
     private double pricePerKilometer;
 
-    private double priceCDW;
+    private double priceCdw;
 
 
 }

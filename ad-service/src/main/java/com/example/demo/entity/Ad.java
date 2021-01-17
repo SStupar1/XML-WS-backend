@@ -52,4 +52,6 @@ public class Ad {
     //slike
     @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Picture> adPictures;
+
+    private Long pricelistId;
 }

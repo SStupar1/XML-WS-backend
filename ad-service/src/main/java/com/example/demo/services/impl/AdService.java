@@ -1,21 +1,27 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.client.AuthClient;
+import com.example.demo.client.RentClient;
 import com.example.demo.dto.client.Agent;
+import com.example.demo.dto.client.Pricelist;
 import com.example.demo.dto.client.SimpleUser;
 import com.example.demo.dto.request.CreateAdRequest;
+import com.example.demo.dto.request.SearchRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
 import com.example.demo.dto.response.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.services.IAdService;
 import com.example.demo.util.GeneralException;
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
@@ -33,8 +39,9 @@ public class AdService implements IAdService {
     private final AuthClient _authClient;
     private final CarService _carService;
     private final IPictureRepository _pictureRepository;
+    private final RentClient _rentClient;
 
-    public AdService(IAdRepository adRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiTypeRepository, ICarRepository carRepository, AuthClient authClient, CarService carService, IPictureRepository pictureRepository){
+    public AdService(IAdRepository adRepository, ICarModelRepository carModelRepository, IFuelTypeRepository fuelTypeRepository, IGearshiftTypeRepository gearshiTypeRepository, ICarRepository carRepository, AuthClient authClient, CarService carService, IPictureRepository pictureRepository, RentClient rentClient){
         _adRepository = adRepository;
         _carModelRepository = carModelRepository;
         _fuelTypeRepository = fuelTypeRepository;
@@ -43,8 +50,8 @@ public class AdService implements IAdService {
         _authClient = authClient;
         _carService = carService;
         _pictureRepository = pictureRepository;
+        _rentClient = rentClient;
     }
-
 
     @Override
     public AdResponse createAd(List<MultipartFile> fileList, CreateAdRequest request) throws GeneralException, IOException {
@@ -128,7 +135,6 @@ public class AdService implements IAdService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public AdResponse getAdById(Long id) {
         Ad ad = _adRepository.findOneById(id);
@@ -193,6 +199,15 @@ public class AdService implements IAdService {
         return mapToPictureResponse(img);
     }
 
+    private List<AdResponse> mapAdsToAdResponses(List<Ad> ads){
+        List<AdResponse> adResponses = new ArrayList<>();
+        for(Ad ad: ads){
+            AdResponse response = mapAdToAdResponse(ad);
+            adResponses.add(response);
+        }
+        return adResponses;
+    }
+
     public AdResponse mapAdToAdResponse(Ad ad) {
         AdResponse adResponse = new AdResponse();
         adResponse.setId(ad.getId());
@@ -234,6 +249,112 @@ public class AdService implements IAdService {
         return adResponse;
     }
 
+    @Override
+    public List<AdResponse> search(String address, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime, Long carBrandId,
+                                   Long carModelId, Long carClassId, Long fuelTypeId, Long gearshiftTypeId, int minPrice, int maxPrice,
+                                   int limitedKm, int kmTraveled, int seats, boolean availableCDW) {
+
+        List<Ad> filteredAds = filteredAds(address, carBrandId,carModelId,fuelTypeId,gearshiftTypeId,carClassId, minPrice,maxPrice,
+                kmTraveled,limitedKm,availableCDW,seats);
+        return mapAdsToAdResponses(filteredAds);
+    }
+
+    private List<Ad> filteredAds(String address, Long carBrandId, Long carModelId, Long fuelTypeId,Long gearshiftTypeId,Long carClassId,
+                                 int minPrice, int maxPrice,int kmTraveled, int limitedKm, boolean availableCDW, int seats) {
+        List<Ad> allAds = _adRepository.findAll();
+        return allAds
+                .stream().filter(ad -> {
+                    if(ad.isSimpleUser()){
+                        SimpleUser simpleUser = _authClient.getSimpleUser(ad.getPublisher());
+                        return simpleUser.getAddress().contains(address);
+                    }else {
+                        Agent agent = _authClient.getAgent(ad.getPublisher());
+                        return agent.getAddress().contains(address);
+                    }
+                })
+                .filter(ad -> {
+                    if(carBrandId != null) {
+                        return ad.getCar().getCarModel().getCarBrand().getId().equals(carBrandId);
+                    } else {
+                        return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(carModelId != null){
+                        return ad.getCar().getCarModel().getId().equals(carModelId);
+                    }else {
+                        return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(fuelTypeId != null){
+                        return ad.getCar().getFuelType().getId().equals(fuelTypeId);
+                    }else {
+                        return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(gearshiftTypeId != null){
+                        return ad.getCar().getGearshiftType().getId().equals(gearshiftTypeId);
+                    }else {
+                        return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(carClassId != null){
+                        return ad.getCar().getCarModel().getCarClass().getId().equals(carClassId);
+                    }else {
+                        return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(minPrice != -1){
+                        Pricelist pricelist = _rentClient.getPricelist(ad.getPricelistId());
+                        return minPrice <= pricelist.getPricePerDay();
+                    }else{
+                        return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(maxPrice != -1){
+                        Pricelist pricelist = _rentClient.getPricelist(ad.getPricelistId());
+                        return maxPrice >= pricelist.getPricePerDay();
+                    }else{
+                        return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(limitedKm != -1){
+                        return ad.getLimitedKm() <= limitedKm;
+                    }else{
+                       return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(kmTraveled != -1){
+                        return ad.getCar().getKmTraveled() <= kmTraveled;
+                    }else{
+                        return true;
+                    }
+                })
+                .filter(ad -> {
+                    if(limitedKm != -1){
+                        return ad.getLimitedKm() <= limitedKm;
+                    }else{
+                        return true;
+                    }
+                })
+                .filter(ad -> ad.isCdw() == availableCDW)
+                .filter(ad -> {
+                    if(seats != -1){
+                        return ad.getSeats() == seats;
+                    }else {
+                        return true;
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
     public static byte[] compressBytes(byte[] data) {
         Deflater deflater = new Deflater();
         deflater.setInput(data);
@@ -268,9 +389,4 @@ public class AdService implements IAdService {
         }
         return outputStream.toByteArray();
     }
-
-
-
-
-
 }

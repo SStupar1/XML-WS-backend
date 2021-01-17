@@ -24,7 +24,7 @@ public class Pricelist {
 
     private double pricePerKilometer;
 
-    private double priceCDW;
+    private double priceCdw;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "discount_id", referencedColumnName = "id")

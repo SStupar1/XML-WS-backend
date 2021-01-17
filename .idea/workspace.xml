@@ -31,37 +31,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72365c5f-3e5a-422c-a97e-2277e57251d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/config/AuthenticationTokenFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/config/SimpleCorsFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/config/WebSecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/controller/BundleController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/CustomerReservationsRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/RequestId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/ReservationListRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/response/BundleResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/response/StringResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/entity/Bundle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/repository/IBundleRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/services/IBundleService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/services/impl/BundleService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rent-service/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/client/RentClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/dto/client/Pricelist.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/dto/request/SearchRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/dto/response/SearchResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/entity/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/entity/Car.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/RentServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/RentServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/client/AdClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/client/AdClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/controller/ReservationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/controller/ReservationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/client/FuelType.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/client/FuelType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/client/GearshiftType.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/client/GearshiftType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/AddDiscountRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/AddDiscountRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/controller/AdController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/controller/AdController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/entity/Ad.java" beforeDir="false" afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/entity/Ad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/services/IAdService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/services/IAdService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/services/impl/AdService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ad-service/src/main/java/com/example/demo/services/impl/AdService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ad-service/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/ad-service/src/main/resources/data.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/CreatePricelistRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/CreatePricelistRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/ReservationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/request/ReservationRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/response/ReservationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/response/ReservationResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/entity/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/entity/Reservation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/repository/IReservationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/repository/IReservationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/services/IReservationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/services/IReservationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/services/impl/ReservationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/services/impl/ReservationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rent-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/response/PricelistResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/dto/response/PricelistResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/entity/Pricelist.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/entity/Pricelist.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/services/impl/PricelistService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/java/com/example/demo/services/impl/PricelistService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rent-service/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/rent-service/src/main/resources/data.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,13 +77,18 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../misa/XML-Microservice-Backend-master/Microservices" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.demo.dto.response" />
       <recent name="com.example.demo.dto.request" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.RentServiceApplication">
+  <component name="RunManager" selected="Spring Boot.AdServiceApplication">
     <configuration name="AdServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="ad-service" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.demo.AdServiceApplication" />
@@ -162,7 +151,9 @@
       <updated>1610721694218</updated>
       <workItem from="1610721704013" duration="7601000" />
       <workItem from="1610729335928" duration="1373000" />
-      <workItem from="1610730729237" duration="5740000" />
+      <workItem from="1610730729237" duration="5845000" />
+      <workItem from="1610812094472" duration="10266000" />
+      <workItem from="1610876527311" duration="4906000" />
     </task>
     <servers />
   </component>
@@ -182,45 +173,53 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="574" y="119" key="#com.intellij.ide.util.MemberChooser" timestamp="1610731474055">
+    <state x="249" y="0" key="#Project_Structure" timestamp="1610820010952">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="574" y="119" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1610731474055" />
-    <state x="499" y="188" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1610734264404">
+    <state x="249" y="0" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1610820010952" />
+    <state x="574" y="119" key="#com.intellij.ide.util.MemberChooser" timestamp="1610814661370">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="499" y="188" key="#com.intellij.ide.util.PackageChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1610734264404" />
-    <state width="1493" height="364" key="GridCell.Tab.0.bottom" timestamp="1610734866723">
+    <state x="574" y="119" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1610814661370" />
+    <state x="499" y="188" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1610814582197">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="364" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1610734866723" />
-    <state width="1493" height="364" key="GridCell.Tab.0.center" timestamp="1610734866723">
+    <state x="499" y="188" key="#com.intellij.ide.util.PackageChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1610814582197" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1610876624679">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="364" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1610734866723" />
-    <state width="1493" height="364" key="GridCell.Tab.0.left" timestamp="1610734866722">
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1610876624679" />
+    <state width="1493" height="293" key="GridCell.Tab.0.bottom" timestamp="1610879980043">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="364" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1610734866722" />
-    <state width="1493" height="364" key="GridCell.Tab.0.right" timestamp="1610734866723">
+    <state width="1493" height="293" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1610879980043" />
+    <state width="1493" height="293" key="GridCell.Tab.0.center" timestamp="1610879980043">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="364" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1610734866723" />
-    <state width="1493" height="364" key="GridCell.Tab.1.bottom" timestamp="1610734866724">
+    <state width="1493" height="293" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1610879980043" />
+    <state width="1493" height="293" key="GridCell.Tab.0.left" timestamp="1610879980043">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="364" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1610734866724" />
-    <state width="1493" height="364" key="GridCell.Tab.1.center" timestamp="1610734866723">
+    <state width="1493" height="293" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1610879980043" />
+    <state width="1493" height="293" key="GridCell.Tab.0.right" timestamp="1610879980043">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="364" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1610734866723" />
-    <state width="1493" height="364" key="GridCell.Tab.1.left" timestamp="1610734866723">
+    <state width="1493" height="293" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1610879980043" />
+    <state width="1493" height="293" key="GridCell.Tab.1.bottom" timestamp="1610879980044">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="364" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1610734866723" />
-    <state width="1493" height="364" key="GridCell.Tab.1.right" timestamp="1610734866723">
+    <state width="1493" height="293" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1610879980044" />
+    <state width="1493" height="293" key="GridCell.Tab.1.center" timestamp="1610879980043">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="364" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1610734866723" />
+    <state width="1493" height="293" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1610879980043" />
+    <state width="1493" height="293" key="GridCell.Tab.1.left" timestamp="1610879980043">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="293" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1610879980043" />
+    <state width="1493" height="293" key="GridCell.Tab.1.right" timestamp="1610879980044">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="293" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1610879980044" />
   </component>
 </project>

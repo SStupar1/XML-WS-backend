@@ -13,3 +13,6 @@ insert into reservation (id, from_date, to_date, from_time, to_time, customer_id
 (9, '2021-03-22', '2021-03-23', '20:00', '20:00', 2, 7, 'PENDING', true, null),
 (10, '2021-04-13', '2021-05-15', '20:00', '20:00', 2, 4, 'PENDING', false, null);
 
+insert into pricelist(id, price_per_day, price_per_kilometer, price_cdw) values
+(1, 10, 1, 0),
+(2, 15, 2, 10);

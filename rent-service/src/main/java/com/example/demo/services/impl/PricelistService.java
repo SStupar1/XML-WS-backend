@@ -33,7 +33,7 @@ public class PricelistService implements IPricelistService {
     @Override
     public PricelistResponse createPricelist(CreatePricelistRequest request) {
         Pricelist pricelist = new Pricelist();
-        pricelist.setPriceCDW(request.getPriceCDW());
+        pricelist.setPriceCdw(request.getPriceCdw());
         pricelist.setPricePerDay(request.getPricePerDay());
         pricelist.setPricePerKilometer(request.getPricePerKilometer());
 
@@ -56,7 +56,7 @@ public class PricelistService implements IPricelistService {
             pricelistResponse.setId(pricelist.getId());
 
         pricelistResponse.setPricePerDay(pricelist.getPricePerDay());
-        pricelistResponse.setPriceCDW(pricelist.getPriceCDW());
+        pricelistResponse.setPriceCdw(pricelist.getPriceCdw());
         pricelistResponse.setPricePerKilometer(pricelist.getPricePerKilometer());
 
         return pricelistResponse;

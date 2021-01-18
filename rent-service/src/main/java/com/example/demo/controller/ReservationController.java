@@ -1,17 +1,16 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.request.CustomerReservationsRequest;
-import com.example.demo.dto.request.RequestId;
 import com.example.demo.dto.request.ReservationRequest;
-import com.example.demo.dto.response.BundleResponse;
 import com.example.demo.dto.response.ReservationResponse;
 import com.example.demo.dto.response.StringResponse;
-import com.example.demo.entity.Reservation;
 import com.example.demo.services.IReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,30 +28,45 @@ public class ReservationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //sve rezervacije koje pripadaju jednom autu/oglasu
+    //sve rezervacije koje pripadaju jednom autu/oglasu koje su na PENDING-u
     @GetMapping("/{id}/ad")
-    public List<ReservationResponse> getAllAdReservations(@PathVariable Long id) {
-        return _reservationService.getAllAdReservations(id);
+    public ResponseEntity<?> getAllAdReservations(@PathVariable Long id) {
+        List<ReservationResponse> retVal = _reservationService.getAllAdReservations(id);
+        if(retVal.isEmpty()){
+            StringResponse stringResponse = new StringResponse();
+            stringResponse.setText("There is no reservations for that advertisement.");
+            return new ResponseEntity<>(stringResponse, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
     //rezervacije koje pripadaju useru(simple useru ili agentu)
     @GetMapping("/customer")
-    public List<ReservationResponse> getAllCustomerReservations(@RequestBody CustomerReservationsRequest request){
-        return _reservationService.getAllCustomerReservations(request);
+    public ResponseEntity<?> getAllCustomerReservations(@RequestParam("customerId") Long customerId, @RequestParam("simpleUser") boolean simpleUser){
+        List<ReservationResponse> retVal = _reservationService.getAllCustomerReservations(customerId, simpleUser);
+        if(retVal.isEmpty()){
+            StringResponse stringResponse = new StringResponse();
+            stringResponse.setText("You did not reserve any car yet.");
+            return new ResponseEntity<>(stringResponse, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
     @GetMapping("/publisher")
-    public List<ReservationResponse> getAllPublisherReservations(@RequestBody CustomerReservationsRequest request){
-        return _reservationService.getAllPublisherReservations(request);
+    public ResponseEntity<?> getAllPublisherReservations(@RequestParam("publisherId") Long publisherId, @RequestParam("simpleUser") boolean simpleUser){
+        List<ReservationResponse> retVal = _reservationService.getAllPublisherReservations(publisherId, simpleUser);
+        if(retVal.isEmpty()){
+            StringResponse stringResponse = new StringResponse();
+            stringResponse.setText("There is no reservations.");
+            return new ResponseEntity<>(stringResponse, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
-
 
     @PostMapping()
     public ResponseEntity<?> createReservation(@RequestBody ReservationRequest reservationRequest){
         return new ResponseEntity<>(_reservationService.createReservation(reservationRequest), HttpStatus.OK);
     }
-
-
 
     @PutMapping("/{id}/approve")
     public ResponseEntity<?> approveReservation(@PathVariable Long id){

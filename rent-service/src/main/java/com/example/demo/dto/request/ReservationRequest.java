@@ -14,13 +14,13 @@ public class ReservationRequest {
 
     private Long customerId;
 
-    private LocalDate fromDate;
+    private String fromDateString;
 
-    private LocalDate toDate;
+    private String toDateString;
 
-    private LocalTime fromTime;
+    private String fromTimeString;
 
-    private LocalTime toTime;
+    private String toTimeString;
 
     private boolean simpleUser;
 

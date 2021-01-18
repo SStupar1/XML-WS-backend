@@ -2,7 +2,6 @@ package com.example.demo.services.impl;
 
 import com.example.demo.client.AdClient;
 import com.example.demo.dto.client.Ad;
-import com.example.demo.dto.request.CustomerReservationsRequest;
 import com.example.demo.dto.request.ReservationRequest;
 import com.example.demo.dto.response.ReservationResponse;
 import com.example.demo.entity.Reservation;
@@ -12,6 +11,8 @@ import com.example.demo.services.IReservationService;
 import com.example.demo.util.enums.ReservationStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,32 +32,55 @@ public class ReservationService implements IReservationService {
         _bundleRepository = bundleRepository;
     }
 
-
-
-
     @Override
     public List<ReservationResponse> getAllAdReservations(Long id) {
         List<Reservation> reservations = new ArrayList<>();
         List<Reservation> allReservations = _reservationRepository.findAll();
         for(Reservation reservation: allReservations){
-            if(reservation.getAdId().equals(id)){
-                if(reservation.getStatus().equals(ReservationStatus.PENDING)) {
-                    reservations.add(reservation);
+            if(reservation.getBundle() == null) {
+                if (reservation.getAdId().equals(id)) {
+                    if (reservation.getStatus().equals(ReservationStatus.PENDING)) {
+                        reservations.add(reservation);
+                    }
                 }
             }
         }
         return mapReservationsToReservationResponses(reservations);
     }
 
+    //pending rezervacije RADI TOP
     @Override
-    public List<ReservationResponse> getAllCustomerReservations(CustomerReservationsRequest request) {
+    public List<ReservationResponse> getAllPublisherReservations(Long publisherId, boolean simpleUser) {
+        System.out.println(publisherId);
+        System.out.println(simpleUser);
+        List<Reservation> reservations = new ArrayList<>();
+        List<Reservation> allReservations = _reservationRepository.findAllByStatus(ReservationStatus.PENDING);
+        for(Reservation reservation: allReservations){
+            //ako rezervacija ne pripada bundleu
+            if(reservation.getBundle() == null) {
+                Ad ad = _adClient.getAd(reservation.getAdId());
+                //provera publisher-a
+                if (ad.getPublisher().getId() == publisherId) {
+                    if (simpleUser == ad.isSimpleUser()) {
+                        reservations.add(reservation);
+                    }
+                }
+            }
+        }
+        return mapReservationsToReservationResponses(reservations);
+    }
+
+    //vraca sve pojedinacne rezervacije od jednog customer-a RADI TOP
+    @Override
+    public List<ReservationResponse> getAllCustomerReservations(Long customerId, boolean simpleUser) {
         List<Reservation> reservations = new ArrayList<>();
         List<Reservation> allReservations = _reservationRepository.findAll();
         for(Reservation reservation: allReservations){
-            if(reservation.getCustomerId() == request.getId()){
-                if(request.isSimpleUser() == reservation.isSimpleUser()){
-                    if(reservation.getBundle() == null)
+            if(reservation.getBundle() == null) {
+                if (reservation.getCustomerId() == customerId) {
+                    if (simpleUser == reservation.isSimpleUser()) {
                         reservations.add(reservation);
+                    }
                 }
             }
         }
@@ -69,8 +93,6 @@ public class ReservationService implements IReservationService {
         _reservationRepository.save(reservation);
         return mapReservationToReservationResponse(reservation);
     }
-
-
 
     @Override
     public ReservationResponse approveReservation(Long id) {
@@ -120,22 +142,6 @@ public class ReservationService implements IReservationService {
         return mapReservationToReservationResponse(savedReservation);
     }
 
-    @Override
-    public List<ReservationResponse> getAllPublisherReservations(CustomerReservationsRequest request) {
-        List<Reservation> reservations = new ArrayList<>();
-        List<Reservation> allReservations = _reservationRepository.findAll();
-        for(Reservation reservation: allReservations){
-            Ad ad = _adClient.getAd(reservation.getAdId());
-            if(ad.getPublisher().getId() == request.getId()){
-                if(request.isSimpleUser() == ad.isSimpleUser()){
-                    if(reservation.getBundle() == null)
-                        reservations.add(reservation);
-                }
-            }
-        }
-        return mapReservationsToReservationResponses(reservations);
-    }
-
     public List<ReservationResponse> mapReservationsToReservationResponses(List<Reservation> reservations){
         List<ReservationResponse> reservationResponses = new ArrayList<>();
         for (Reservation reservation : reservations) {
@@ -146,13 +152,17 @@ public class ReservationService implements IReservationService {
     }
 
     public Reservation createReservationEntity(ReservationRequest reservationRequest) {
+        LocalDate fromDate = LocalDate.parse(reservationRequest.getFromDateString());
+        LocalTime fromTime = LocalTime.parse(reservationRequest.getFromTimeString());
+        LocalDate toDate = LocalDate.parse(reservationRequest.getToDateString());
+        LocalTime toTime = LocalTime.parse(reservationRequest.getToTimeString());
         Reservation reservation = new Reservation();
         reservation.setCustomerId(reservationRequest.getCustomerId());
         reservation.setAdId(reservationRequest.getAdId());
-        reservation.setFromDate(reservationRequest.getFromDate());
-        reservation.setToDate(reservationRequest.getToDate());
-        reservation.setFromTime(reservationRequest.getFromTime());
-        reservation.setToTime(reservationRequest.getToTime());
+        reservation.setFromDate(fromDate);
+        reservation.setToDate(toDate);
+        reservation.setFromTime(fromTime);
+        reservation.setToTime(toTime);
         reservation.setStatus(ReservationStatus.PENDING);
         reservation.setSimpleUser(reservationRequest.isSimpleUser());
         return reservation;

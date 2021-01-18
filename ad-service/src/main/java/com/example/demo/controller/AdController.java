@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.*;
 import com.example.demo.dto.response.AdResponse;
 import com.example.demo.dto.response.PictureResponse;
-import com.example.demo.dto.response.SearchResponse;
 import com.example.demo.dto.response.TextResponse;
 import com.example.demo.services.IAdService;
 import org.springframework.http.HttpStatus;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -97,18 +94,22 @@ public class AdController {
     }
 
     @GetMapping("/search")
-    public List<AdResponse> search(@RequestParam("address") String address, @RequestParam(value="fromDate") LocalDate fromDate,
-                                 @RequestParam(value="toDate") LocalDate toDate, @RequestParam(value="fromTime") LocalTime fromTime,
-                                 @RequestParam(value="toTime") LocalTime toTime, @RequestParam(value="carBrandId") Long carBrandId,
+    public ResponseEntity<?> search(@RequestParam("address") String address, @RequestParam(value="fromDateString") String fromDateString,
+                                 @RequestParam(value="toDateString") String toDateString, @RequestParam(value="fromTimeString") String fromTimeString,
+                                 @RequestParam(value="toTimeString") String toTimeString, @RequestParam(value="carBrandId") Long carBrandId,
                                  @RequestParam(value="carModelId") Long carModelId, @RequestParam(value="carClassId") Long carClassId,
                                  @RequestParam(value="fuelTypeId") Long fuelTypeId, @RequestParam(value="gearshiftTypeId") Long gearshiftTypeId,
                                  @RequestParam(value="minPrice") int minPrice, @RequestParam(value="maxPrice") int maxPrice,
                                  @RequestParam(value="limitedKm") int limitedKm, @RequestParam(value="kmTraveled") int kmTraveled,
                                  @RequestParam(value="seats") int seats,@RequestParam(value="availableCDW") boolean availableCDW){
-        System.out.println(address + fromDate + toDate + fromTime + toTime + carBrandId + carModelId + carClassId
-                + fuelTypeId + gearshiftTypeId + minPrice + maxPrice + limitedKm + kmTraveled + seats + availableCDW);
+        if(address.equals("") || fromDateString.equals("") || toDateString.equals("") || fromTimeString.equals("") || toTimeString.equals("")){
+            TextResponse error = new TextResponse();
+            error.setText("Insert required fields!");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
 
-        return _adService.search(address, fromDate, toDate, fromTime, toTime, carBrandId, carModelId, carClassId, fuelTypeId, gearshiftTypeId,
-                                 minPrice, maxPrice, limitedKm, kmTraveled, seats, availableCDW);
+        return new ResponseEntity<>(_adService.search(address, fromDateString, toDateString, fromTimeString, toTimeString, carBrandId, carModelId, carClassId, fuelTypeId, gearshiftTypeId,
+                minPrice, maxPrice, limitedKm, kmTraveled, seats, availableCDW), HttpStatus.OK);
+
     }
 }

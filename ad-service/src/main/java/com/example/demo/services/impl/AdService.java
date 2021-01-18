@@ -6,14 +6,12 @@ import com.example.demo.dto.client.Agent;
 import com.example.demo.dto.client.Pricelist;
 import com.example.demo.dto.client.SimpleUser;
 import com.example.demo.dto.request.CreateAdRequest;
-import com.example.demo.dto.request.SearchRequest;
 import com.example.demo.dto.request.UpdateAdRequest;
 import com.example.demo.dto.response.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.services.IAdService;
 import com.example.demo.util.GeneralException;
-import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -250,20 +248,45 @@ public class AdService implements IAdService {
     }
 
     @Override
-    public List<AdResponse> search(String address, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime, Long carBrandId,
-                                   Long carModelId, Long carClassId, Long fuelTypeId, Long gearshiftTypeId, int minPrice, int maxPrice,
-                                   int limitedKm, int kmTraveled, int seats, boolean availableCDW) {
+    public SearchResponse search(String address, String fromDateString, String toDateString, String fromTimeString, String toTimeString,
+                                   Long carBrandId, Long carModelId, Long carClassId, Long fuelTypeId, Long gearshiftTypeId,
+                                   int minPrice, int maxPrice, int limitedKm, int kmTraveled, int seats, boolean availableCDW) {
+
+        if(!fromDateString.equals("")){
+            LocalDate fromDate = LocalDate.parse(fromDateString);
+            System.out.println("From date " + fromDate);
+        }
+        if(!toDateString.equals("")){
+            LocalDate toDate = LocalDate.parse(toDateString);
+            System.out.println("To date " + toDate);
+        }
+        if(!fromTimeString.equals("")){
+            LocalTime fromTime = LocalTime.parse(fromTimeString);
+            System.out.println("From time " + fromTime);
+        }
+        if(!toTimeString.equals("")){
+            LocalTime toTime = LocalTime.parse(toTimeString);
+            System.out.println("To time " + toTime);
+        }
 
         List<Ad> filteredAds = filteredAds(address, carBrandId,carModelId,fuelTypeId,gearshiftTypeId,carClassId, minPrice,maxPrice,
                 kmTraveled,limitedKm,availableCDW,seats);
-        return mapAdsToAdResponses(filteredAds);
+        List<AdResponse> adResponses =  mapAdsToAdResponses(filteredAds);
+        return mapToSearchResponse(adResponses);
+    }
+
+    private SearchResponse mapToSearchResponse(List<AdResponse> adResponses) {
+        SearchResponse searchResponse = new SearchResponse();
+        searchResponse.setAds(adResponses);
+        return searchResponse;
     }
 
     private List<Ad> filteredAds(String address, Long carBrandId, Long carModelId, Long fuelTypeId,Long gearshiftTypeId,Long carClassId,
                                  int minPrice, int maxPrice,int kmTraveled, int limitedKm, boolean availableCDW, int seats) {
         List<Ad> allAds = _adRepository.findAll();
         return allAds
-                .stream().filter(ad -> {
+                .stream()
+                .filter(ad -> {
                     if(ad.isSimpleUser()){
                         SimpleUser simpleUser = _authClient.getSimpleUser(ad.getPublisher());
                         return simpleUser.getAddress().contains(address);
@@ -273,35 +296,35 @@ public class AdService implements IAdService {
                     }
                 })
                 .filter(ad -> {
-                    if(carBrandId != null) {
+                    if(carBrandId != -1) {
                         return ad.getCar().getCarModel().getCarBrand().getId().equals(carBrandId);
                     } else {
                         return true;
                     }
                 })
                 .filter(ad -> {
-                    if(carModelId != null){
+                    if(carModelId != -1){
                         return ad.getCar().getCarModel().getId().equals(carModelId);
                     }else {
                         return true;
                     }
                 })
                 .filter(ad -> {
-                    if(fuelTypeId != null){
+                    if(fuelTypeId != -1){
                         return ad.getCar().getFuelType().getId().equals(fuelTypeId);
                     }else {
                         return true;
                     }
                 })
                 .filter(ad -> {
-                    if(gearshiftTypeId != null){
+                    if(gearshiftTypeId != -1){
                         return ad.getCar().getGearshiftType().getId().equals(gearshiftTypeId);
                     }else {
                         return true;
                     }
                 })
                 .filter(ad -> {
-                    if(carClassId != null){
+                    if(carClassId != -1){
                         return ad.getCar().getCarModel().getCarClass().getId().equals(carClassId);
                     }else {
                         return true;

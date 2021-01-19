@@ -71,7 +71,6 @@ public class ReservationController {
     @PutMapping("/{id}/approve")
     public ResponseEntity<?> approveReservation(@PathVariable Long id){
         return new ResponseEntity<>(_reservationService.approveReservation(id), HttpStatus.OK);
-
     }
 
     @PutMapping("/{id}/deny")

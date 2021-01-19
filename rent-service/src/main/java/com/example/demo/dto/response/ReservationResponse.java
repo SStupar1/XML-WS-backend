@@ -28,4 +28,6 @@ public class ReservationResponse {
     private boolean simpleUser;
 
     private ReservationStatus status;
+
+    private Long customerId;
 }

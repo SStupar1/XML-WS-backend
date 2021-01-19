@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.request.RequestId;
 import com.example.demo.dto.request.ReservationRequest;
 import com.example.demo.dto.response.ReservationResponse;
 import com.example.demo.dto.response.StringResponse;
@@ -68,13 +69,13 @@ public class ReservationController {
         return new ResponseEntity<>(_reservationService.createReservation(reservationRequest), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/approve")
-    public ResponseEntity<?> approveReservation(@PathVariable Long id){
-        return new ResponseEntity<>(_reservationService.approveReservation(id), HttpStatus.OK);
+    @PutMapping("/approve")
+        public ResponseEntity<?> approveReservation(@RequestBody RequestId request){
+        return new ResponseEntity<>(_reservationService.approveReservation(request.getId()), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/deny")
-    public ResponseEntity<?> denyReservation(@PathVariable Long id){
-        return new ResponseEntity<>(_reservationService.denyReservation(id), HttpStatus.OK);
+    @PutMapping("/deny")
+    public ResponseEntity<?> denyReservation(@RequestBody RequestId request){
+        return new ResponseEntity<>(_reservationService.denyReservation(request.getId()), HttpStatus.OK);
     }
 }

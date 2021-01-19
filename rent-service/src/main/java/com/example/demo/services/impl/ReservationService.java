@@ -171,6 +171,7 @@ public class ReservationService implements IReservationService {
     public ReservationResponse mapReservationToReservationResponse(Reservation reservation) {
         ReservationResponse reservationResponse = new ReservationResponse();
         Ad adClientResponse = _adClient.getAd(reservation.getAdId());
+        reservationResponse.setCustomerId(reservation.getCustomerId());
         reservationResponse.setToDate(reservation.getToDate());
         reservationResponse.setFromDate(reservation.getFromDate());
         reservationResponse.setId(reservation.getId());

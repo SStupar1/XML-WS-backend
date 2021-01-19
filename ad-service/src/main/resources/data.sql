@@ -69,7 +69,7 @@ insert into car(id, km_traveled, car_model_id, fuel_type_id, gearshift_type_id) 
 (10, 30000, 14, 8, 1);
 
 insert into ad(id, publisher ,car_id, limited_distance, limited_km, cdw, seats, creation_date, simple_user, name, pricelist_id) values
-(1, 1, 1, false, 0, false, 4, '2020-07-08', true, 'BMW X1 Crossover' ,1),
+(1, 1, 1, false, 0, false, 4, '2020-07-08', false, 'BMW X1 Crossover' ,1),
 (2, 1, 3, false, 0, true, 2, '2020-01-08', false, 'BMW Series5 Sedan', 2),
 (3, 1, 5, false, 0, true, 3, '2020-11-23', false, 'Honda Civic Sedan', 2),
 (4, 1, 4, true, 40, false, 7, '2020-07-13', true, 'Audi Q7 SUV', 1),

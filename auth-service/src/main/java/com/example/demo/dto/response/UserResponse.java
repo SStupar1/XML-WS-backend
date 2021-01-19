@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public  class UserResponse {
+public class UserResponse {
 
     private Long id;
 

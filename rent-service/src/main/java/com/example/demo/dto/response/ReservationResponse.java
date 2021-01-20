@@ -30,4 +30,5 @@ public class ReservationResponse {
     private ReservationStatus status;
 
     private Long customerId;
+
 }

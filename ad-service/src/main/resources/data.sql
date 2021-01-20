@@ -82,11 +82,14 @@ insert into ad(id, publisher ,car_id, limited_distance, limited_km, cdw, seats, 
 
 insert into comment(id, content, customer_id, simple_user, ad_id, status) values
     (1, "Prvi komentar", 2, true, 1, 'PENDING'),
-    (2, "Drugi komentar", 1, true, 4, 'PENDING'),
-    (3, "Treci komentar", 4, false, 3, 'DENIED');
+    (2, "Drugi komentar", 1, true, 1, 'PENDING'),
+    (3, "Treci komentar", 4, false, 1, 'DENIED');
 
-insert into rating(id, grade, simple_user, ad_id) values
-    (1, 3.4, 1, 1),
-    (2, 5.0, 2, 2);
+insert into rating(id, grade, customer_id, ad_id) values
+    (1, 1, 1, 1),
+    (2, 3, 1, 2),
+    (3, 4, 1, 3),
+    (4, 5, 2, 1),
+    (5, 5, 2, 2);
 
 

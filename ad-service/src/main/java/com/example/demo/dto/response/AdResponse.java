@@ -15,27 +15,16 @@ import java.util.List;
 public class AdResponse {
 
     private Long id;
-
     private String name;
-
     private boolean limitedDistance;
-
     private int limitedKm;
-
     private boolean cdw;
-
     private int seats;
-
     private LocalDate creationDate;
-
     private CarResponse car;
-
     private boolean simpleUser;
-
     private PublisherResponse publisher;
-
     private List<PictureResponse> pictures;
-
     private Pricelist pricelist;
-
+    private double avgRating;
 }

@@ -1,10 +1,13 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.client.AuthClient;
+import com.example.demo.client.RentClient;
 import com.example.demo.dto.client.Agent;
+import com.example.demo.dto.client.Reservation;
 import com.example.demo.dto.client.SimpleUser;
 import com.example.demo.dto.request.RateAdRequest;
 import com.example.demo.dto.response.AverageRatingResponse;
+import com.example.demo.dto.response.PublisherResponse;
 import com.example.demo.dto.response.RatingResponse;
 import com.example.demo.entity.Ad;
 import com.example.demo.entity.Rating;
@@ -21,11 +24,13 @@ public class RatingService implements IRatingService {
     private final IRatingRepository _ratingRepository;
     private final AuthClient _authClient;
     private final IAdRepository _adRepository;
+    private final RentClient _rentClient;
 
-    public RatingService(IRatingRepository ratingRepository, AuthClient authClient, IAdRepository adRepository) {
+    public RatingService(IRatingRepository ratingRepository, AuthClient authClient, IAdRepository adRepository, RentClient rentClient) {
         _ratingRepository = ratingRepository;
         _authClient = authClient;
         _adRepository = adRepository;
+        _rentClient = rentClient;
     }
 
     @Override
@@ -40,10 +45,9 @@ public class RatingService implements IRatingService {
     public RatingResponse rateAd(RateAdRequest request) {
         SimpleUser simpleUser = _authClient.getSimpleUser(request.getSimpleUserId());
         Ad ad = _adRepository.findOneById(request.getAdId());
-
         Rating rating = new Rating();
         rating.setGrade(request.getGrade());
-        rating.setSimpleUser(simpleUser.getId());
+        rating.setCustomerId(simpleUser.getId());
         rating.setAd(ad);
         Rating savedRating = _ratingRepository.save(rating);
         ad.getRatings().add(savedRating);
@@ -61,9 +65,7 @@ public class RatingService implements IRatingService {
             counter++;
         }
         AverageRatingResponse response = new AverageRatingResponse();
-        Agent agent = _authClient.getAgent(_adRepository.findOneById(id).getPublisher());
-        response.setAgentName(agent.getName());
-        response.setCarModelName(_adRepository.findOneById(id).getCar().getCarModel().getName());
+
         if(counter == 0){
             response.setAverageRating(0);
             return response;
@@ -78,7 +80,7 @@ public class RatingService implements IRatingService {
         response.setAgentName(agent.getName());
         response.setGrade(rating.getGrade());
         response.setRatingId(rating.getId());
-        SimpleUser simpleUser = _authClient.getSimpleUser(rating.getSimpleUser());
+        SimpleUser simpleUser = _authClient.getSimpleUser(rating.getCustomerId());
         response.setCustomerFirstName(simpleUser.getFirstName());
         response.setCustomerLastName(simpleUser.getLastName());
         response.setCarBrandName(rating.getAd().getCar().getCarModel().getCarBrand().getName());

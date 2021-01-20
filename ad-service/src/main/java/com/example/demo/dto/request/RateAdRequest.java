@@ -12,4 +12,5 @@ public class RateAdRequest {
     private double grade;
 
     private Long adId;
+
 }

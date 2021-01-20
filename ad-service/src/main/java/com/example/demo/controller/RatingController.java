@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/ratings")
 public class RatingController {
+
     private final IRatingService _ratingService;
 
     public RatingController(IRatingService ratingService) {
@@ -22,7 +23,7 @@ public class RatingController {
         return _ratingService.getAllRatingsByAd(id);
     }
 
-    @PostMapping
+    @PostMapping()
     RatingResponse rateAd(@RequestBody RateAdRequest request) throws Exception{
         return _ratingService.rateAd(request);
     }

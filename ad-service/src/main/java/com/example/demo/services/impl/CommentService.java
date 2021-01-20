@@ -12,8 +12,10 @@ import com.example.demo.repository.IAdRepository;
 import com.example.demo.repository.ICommentRepository;
 import com.example.demo.services.ICommentService;
 import com.example.demo.util.RequestStatus;
+import com.example.demo.util.ReservationStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,8 +36,13 @@ public class CommentService implements ICommentService {
 
     @Override
     public List<CommentResponse> getAllCommentsByAd(Long id) {
+        List<Comment> filteredComments = new ArrayList<>();
         List<Comment> comments = _commentRepository.findAllByAd_Id(id);
-        return  comments.stream()
+        for(Comment c: comments){
+            if(c.getStatus().equals(RequestStatus.PENDING))
+                filteredComments.add(c);
+        }
+        return  filteredComments.stream()
                 .map(comment -> mapCommentToCommentResponse(comment))
                 .collect(Collectors.toList());
     }

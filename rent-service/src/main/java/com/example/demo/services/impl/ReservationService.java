@@ -5,6 +5,7 @@ import com.example.demo.dto.client.Ad;
 import com.example.demo.dto.request.ReservationRequest;
 import com.example.demo.dto.response.ReservationResponse;
 import com.example.demo.entity.Bundle;
+import com.example.demo.entity.Pricelist;
 import com.example.demo.entity.Reservation;
 import com.example.demo.repository.IBundleRepository;
 import com.example.demo.repository.IReservationRepository;
@@ -67,6 +68,15 @@ public class ReservationService implements IReservationService {
             }
         }
         return mapReservationsToReservationResponses(reservations);
+    }
+
+    @Override
+    public ReservationResponse getReservation(Long id) {
+        Reservation reservation = _reservationRepository.findOneById(id);
+        if(reservation != null) {
+            return mapReservationToReservationResponse(reservation);
+        }
+        return null;
     }
 
     //vraca sve pojedinacne rezervacije od jednog customer-a RADI TOP

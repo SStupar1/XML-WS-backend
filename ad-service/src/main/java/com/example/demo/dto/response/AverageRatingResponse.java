@@ -8,8 +8,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AverageRatingResponse {
     private double averageRating;
-
-    private String carModelName;
-
-    private String agentName;
 }

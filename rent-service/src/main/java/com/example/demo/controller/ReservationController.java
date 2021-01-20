@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.request.RequestId;
 import com.example.demo.dto.request.ReservationRequest;
+import com.example.demo.dto.response.PricelistResponse;
 import com.example.demo.dto.response.ReservationResponse;
 import com.example.demo.dto.response.StringResponse;
 import com.example.demo.services.IReservationService;
@@ -27,6 +28,17 @@ public class ReservationController {
     public ResponseEntity<?> hello(){
         System.out.println("Hello from rent service");
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getReservation(@PathVariable("id") Long id){
+        ReservationResponse reservationResponse = _reservationService.getReservation(id);
+        if(reservationResponse != null){
+            return new ResponseEntity<>(reservationResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Reservation doesn't exist.", HttpStatus.NOT_FOUND);
+        }
     }
 
     //sve rezervacije koje pripadaju jednom autu/oglasu koje su na PENDING-u

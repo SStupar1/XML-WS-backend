@@ -17,4 +17,6 @@ public interface IReservationService {
     ReservationResponse denyReservation(Long id);
 
     List<ReservationResponse> getAllPublisherReservations(Long publisherId, boolean simpleUser);
+
+    ReservationResponse getReservation(Long id);
 }

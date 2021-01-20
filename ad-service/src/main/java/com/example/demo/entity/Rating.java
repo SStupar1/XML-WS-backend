@@ -21,7 +21,8 @@ public class Rating {
 
     private double grade;
 
-    private Long simpleUser;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_id")

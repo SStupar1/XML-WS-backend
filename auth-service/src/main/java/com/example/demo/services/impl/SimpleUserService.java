@@ -1,6 +1,7 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.dto.request.GetIdRequest;
+import com.example.demo.dto.request.MailDTO;
 import com.example.demo.dto.request.UpdateSimpleUserRequest;
 import com.example.demo.dto.response.SimpleUserResponse;
 import com.example.demo.entity.SimpleUser;
@@ -10,6 +11,8 @@ import com.example.demo.repository.IUserRepository;
 import com.example.demo.services.IEmailService;
 import com.example.demo.services.ISimpleUserService;
 import com.example.demo.util.enums.RequestStatus;
+import com.example.demo.util.rabbit.QueueProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +20,9 @@ import java.util.List;
 
 @Service
 public class SimpleUserService implements ISimpleUserService {
+
+    @Autowired
+    private QueueProducer queueProducer;
 
     private final ISimpleUserRepository _simpleUserRepository;
 
@@ -73,7 +79,22 @@ public class SimpleUserService implements ISimpleUserService {
         simpleUser.setRequestStatus(RequestStatus.APPROVED);
         SimpleUser savedSimpleUser = _simpleUserRepository.save(simpleUser);
 
-        _emailService.approveRegistrationMail(savedSimpleUser);
+        System.out.println("Slanje emaila...");
+
+        MailDTO mail = new MailDTO();
+        mail.setId(simpleUser.getId());
+        mail.setRole("Simple");
+        mail.setFirstName(simpleUser.getFirstName());
+        mail.setLastName(simpleUser.getLastName());
+        mail.setUsername(simpleUser.getUser().getUsername());
+        try {
+            queueProducer.produce(mail);
+        } catch (Exception e) {
+            System.out.println("Nisam poslao simple user registration mail");
+            e.printStackTrace();
+        }
+
+        //_emailService.approveRegistrationMail(savedSimpleUser);
     }
 
     @Override

@@ -7,9 +7,13 @@ import com.example.demo.entity.Comment;
 import java.util.List;
 
 public interface ICommentService {
-     List<CommentResponse> getAllComments();
-
-     CommentResponse getAdById(Long id);
-
+     List<CommentResponse> getAllCommentsByAd(Long id);
+     
      CommentResponse createComment(CreateCommentRequest request);
+
+     CommentResponse approveComment(Long id);
+
+     CommentResponse denyComment(Long id);
+
+     List<CommentResponse> getAllCommentsByStatus(String status);
 }

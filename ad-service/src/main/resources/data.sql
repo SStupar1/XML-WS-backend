@@ -80,10 +80,10 @@ insert into ad(id, publisher ,car_id, limited_distance, limited_km, cdw, seats, 
 (9, 2, 2, true, 150, true, 2, '2020-04-22', false, 'Toyota Yaris City', 2),
 (10, 2, 6, true, 30, false, 4, '2020-12-01', false, 'Audi R8 Coupe',1);
 
-insert into comment(id, comment, publisher_id, simple_user, ad_id) values
-    (1, "Prvi komentar", 2, true, 1),
-    (2, "Drugi komentar", 1, true, 4),
-    (3, "Treci komentar", 4, false, 5);
+insert into comment(id, content, customer_id, simple_user, ad_id, status) values
+    (1, "Prvi komentar", 2, true, 1, 'PENDING'),
+    (2, "Drugi komentar", 1, true, 4, 'PENDING'),
+    (3, "Treci komentar", 4, false, 3, 'DENIED');
 
 insert into rating(id, grade, simple_user, ad_id) values
     (1, 3.4, 1, 1),

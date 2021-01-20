@@ -4,6 +4,7 @@ import com.example.demo.client.AdClient;
 import com.example.demo.dto.client.Ad;
 import com.example.demo.dto.request.ReservationRequest;
 import com.example.demo.dto.response.ReservationResponse;
+import com.example.demo.entity.Bundle;
 import com.example.demo.entity.Reservation;
 import com.example.demo.repository.IBundleRepository;
 import com.example.demo.repository.IReservationRepository;
@@ -51,8 +52,6 @@ public class ReservationService implements IReservationService {
     //pending rezervacije RADI TOP
     @Override
     public List<ReservationResponse> getAllPublisherReservations(Long publisherId, boolean simpleUser) {
-        System.out.println(publisherId);
-        System.out.println(simpleUser);
         List<Reservation> reservations = new ArrayList<>();
         List<Reservation> allReservations = _reservationRepository.findAllByStatus(ReservationStatus.PENDING);
         for(Reservation reservation: allReservations){
@@ -96,42 +95,54 @@ public class ReservationService implements IReservationService {
 
     @Override
     public ReservationResponse approveReservation(Long id) {
-        List<Reservation> reservations = _reservationRepository.findAll();
-        Reservation reservation = _reservationRepository.findOneById(id);
-        reservation.setStatus(ReservationStatus.APPROVED);
-        _reservationRepository.save(reservation);
-        for(Reservation r: reservations){
-            if(reservation.getAdId().equals(r.getAdId())){
-                if(reservation.getFromDate().isBefore(r.getFromDate())){
-                    if(reservation.getToDate().isAfter(r.getFromDate())){
-                        r.setStatus(ReservationStatus.DENIED);
-                        _reservationRepository.save(r);
-                    }else if(reservation.getToTime().isAfter(r.getFromTime())){
-                            r.setStatus(ReservationStatus.DENIED);
-                            _reservationRepository.save(r);
+        Reservation fixReservation = _reservationRepository.findOneById(id);
+        LocalDate fromFixDate = fixReservation.getFromDate();
+        LocalDate toFixDate = fixReservation.getToDate();
+        LocalTime fromFixTime = fixReservation.getFromTime();
+        LocalTime toFixTime = fixReservation.getToTime();
+        fixReservation.setStatus(ReservationStatus.APPROVED);
+        _reservationRepository.save(fixReservation);
 
-                    }
-                }else if(reservation.getFromDate().isAfter(r.getFromDate())){
-                    if(reservation.getFromDate().isBefore(r.getToDate())){
-                        r.setStatus(ReservationStatus.DENIED);
-                        _reservationRepository.save(r);
-                    }else if(r.getToTime().isAfter(reservation.getFromTime())){
-                        r.setStatus(ReservationStatus.DENIED);
-                        _reservationRepository.save(r);
-                    }
-                }else{
-                    System.out.println("isti sam dan");
-                    if (reservation.getFromTime().isBefore(r.getFromTime())) {
-                        if(reservation.getToTime().isAfter(r.getToTime())){
-                            r.setStatus(ReservationStatus.DENIED);
-                            _reservationRepository.save(r);
-                        }
+        List<Reservation> allReservations = _reservationRepository.findAllByStatus(ReservationStatus.PENDING);
+        for(Reservation checkReservation: allReservations){
+            LocalDate fromCheckDate = checkReservation.getFromDate();
+            LocalDate toCheckDate = checkReservation.getToDate();
+            LocalTime fromCheckTime = checkReservation.getFromTime();
+            LocalTime toCheckTime = checkReservation.getToTime();
+            if(overlapDate(fromFixDate, toFixDate, fromFixTime, toFixTime, fromCheckDate, toCheckDate, fromCheckTime, toCheckTime)){
+                //ako se datumi preklapaju
+                checkReservation.setStatus(ReservationStatus.DENIED);
+                _reservationRepository.save(checkReservation);
+            }
+        }
 
-                    }
+        return mapReservationToReservationResponse(fixReservation);
+    }
+
+    private boolean overlapDate(LocalDate fromFixDate, LocalDate toFixDate, LocalTime fromFixTime, LocalTime toFixTime,
+                                LocalDate fromCheckDate, LocalDate toCheckDate, LocalTime fromCheckTime, LocalTime toCheckTime){
+        boolean retVal = true;
+
+        if(fromCheckDate.isBefore(fromFixDate)){
+            if(toCheckDate.isBefore(fromFixDate)){
+                retVal = false;
+            }else if(toCheckDate.isEqual(fromFixDate)){
+                //proveri vreme
+                if(toCheckTime.isBefore(fromFixTime)){
+                    retVal = false;
                 }
             }
         }
-        return mapReservationToReservationResponse(reservation);
+        if(fromCheckDate.isAfter(toFixDate)){
+            retVal = false;
+        }
+        if(fromCheckDate.isEqual(toFixDate)){
+            //proveri vreme
+            if(fromCheckTime.isBefore(toFixTime)){
+                retVal = false;
+            }
+        }
+        return retVal;
     }
 
     @Override

@@ -7,13 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCommentRequest {
-
-    private Long customerId;
-
-    private String content;
-
-    private Long adId;
-
-    private boolean simpleUser;
+public class RequestId {
+    private Long id;
 }

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.util.enums.ReservationStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,5 +23,8 @@ public class Bundle {
     private List<Reservation> reservations = new ArrayList<>();
 
     private Long publisherId;
+
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
 }

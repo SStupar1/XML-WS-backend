@@ -1,5 +1,4 @@
 package com.example.demo.entity;
-
 import com.example.demo.util.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,10 +18,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String comment;
+    private String content;
 
-    private Long publisherId;
-    
+    private Long customerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_id")
@@ -32,6 +30,4 @@ public class Comment {
     private RequestStatus status;
 
     private boolean simpleUser;
-
-
 }

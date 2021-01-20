@@ -18,5 +18,5 @@ public class PricelistResponse {
 
     private double priceCdw;
 
-    private int discountId;
+    private DiscountResponse discount;
 }

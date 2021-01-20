@@ -217,6 +217,8 @@ public class AdService implements IAdService {
         adResponse.setCdw(ad.isCdw());
         adResponse.setLimitedDistance(ad.isLimitedDistance());
         adResponse.setSimpleUser(ad.isSimpleUser());
+        Pricelist pricelist = _rentClient.getPricelist(ad.getPricelistId());
+        adResponse.setPricelist(pricelist);
         PublisherResponse publisherResponse = new PublisherResponse();
         if(ad.isSimpleUser()){
             SimpleUser simpleUser = _authClient.getSimpleUser(ad.getPublisher());

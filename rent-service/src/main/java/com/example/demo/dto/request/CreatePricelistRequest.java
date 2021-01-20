@@ -13,5 +13,5 @@ public class CreatePricelistRequest {
 
     private double priceCdw;
 
-
+    private Long discountId;
 }

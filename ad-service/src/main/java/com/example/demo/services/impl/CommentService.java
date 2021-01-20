@@ -11,6 +11,7 @@ import com.example.demo.entity.Comment;
 import com.example.demo.repository.IAdRepository;
 import com.example.demo.repository.ICommentRepository;
 import com.example.demo.services.ICommentService;
+import com.example.demo.util.RequestStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,54 +32,55 @@ public class CommentService implements ICommentService {
         _adService = adService;
     }
 
-
     @Override
-    public List<CommentResponse> getAllComments()
-    {
-        List<Comment> comments = _commentRepository.findAll();
+    public List<CommentResponse> getAllCommentsByAd(Long id) {
+        List<Comment> comments = _commentRepository.findAllByAd_Id(id);
         return  comments.stream()
                 .map(comment -> mapCommentToCommentResponse(comment))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CommentResponse getAdById(Long id) {
-        Comment comment = _commentRepository.findAllByAd_Id(id);
-        if(comment != null) {
-            return mapCommentToCommentResponse(comment);
-        }
-        return null;
+    public CommentResponse createComment(CreateCommentRequest request) {
+        Ad ad = _adRepository.findOneById(request.getAdId());
+        Comment comment = new Comment();
+        comment.setContent(request.getContent());
+        comment.setAd(ad);
+        comment.setStatus(RequestStatus.PENDING);
+        comment.setCustomerId(request.getCustomerId());
+        comment.setSimpleUser(request.isSimpleUser());
+        Comment savedComment = _commentRepository.save(comment);
+        return mapCommentToCommentResponse(savedComment);
     }
 
     @Override
-    public CommentResponse createComment(CreateCommentRequest request) {
+    public CommentResponse approveComment(Long id) {
+        Comment comment = _commentRepository.findOneById(id);
+        comment.setStatus(RequestStatus.APPROVED);
+        Comment savedComment = _commentRepository.save(comment);
+        return mapCommentToCommentResponse(savedComment);
+    }
 
+    @Override
+    public CommentResponse denyComment(Long id) {
+        Comment comment = _commentRepository.findOneById(id);
+        comment.setStatus(RequestStatus.DENIED);
+        Comment savedComment = _commentRepository.save(comment);
+        return mapCommentToCommentResponse(savedComment);
+    }
 
-        Ad ad = _adRepository.findOneById(request.getAdId());
-
-        if(request.isSimpleUser()){
-
-            SimpleUser simpleUser = _authClient.getSimpleUser(request.getUserId());
-            Comment comment = new Comment();
-            comment.setComment(request.getComment());
-            comment.setAd(ad);
-            comment.setPublisherId(request.getUserId());
-            comment.setSimpleUser(request.isSimpleUser());
-            Comment savedComment = _commentRepository.save(comment);
-
-            return mapCommentToCommentResponse(savedComment);
-        } else {
-
-            Agent agent = _authClient.getAgent(request.getUserId());
-            Comment comment = new Comment();
-            comment.setComment(request.getComment());
-          //  comment.setId(request.getUserId());
-            comment.setAd(ad);
-            comment.setSimpleUser(request.isSimpleUser());
-            Comment savedComment = _commentRepository.save(comment);
-
-            return mapCommentToCommentResponse(savedComment);
+    @Override
+    public List<CommentResponse> getAllCommentsByStatus(String status) {
+        RequestStatus requestStatus = RequestStatus.APPROVED;
+        if(status.equals("PENDING")){
+            requestStatus = RequestStatus.PENDING;
+        }else if(status.equals("DENIED")){
+            requestStatus = RequestStatus.DENIED;
         }
+        List<Comment> comments = _commentRepository.findAllByStatus(requestStatus);
+        return  comments.stream()
+                .map(comment -> mapCommentToCommentResponse(comment))
+                .collect(Collectors.toList());
     }
 
     public CommentResponse mapCommentToCommentResponse(Comment comment) {
@@ -86,8 +88,9 @@ public class CommentService implements ICommentService {
         response.setId(comment.getId());
         AdResponse adResponse = _adService.mapAdToAdResponse(comment.getAd());
         response.setAd(adResponse);
-        response.setContent(comment.getComment());
-        response.setUserId(comment.getPublisherId());
+        response.setContent(comment.getContent());
+        response.setStatus(comment.getStatus());
+        response.setCustomerId(comment.getCustomerId());
         response.setSimpleUser(comment.isSimpleUser());
         return response;
     }

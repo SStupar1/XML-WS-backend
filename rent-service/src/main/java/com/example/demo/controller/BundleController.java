@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.request.RequestId;
 import com.example.demo.dto.request.ReservationListRequest;
-import com.example.demo.dto.request.ReservationRequest;
 import com.example.demo.dto.response.BundleResponse;
 import com.example.demo.dto.response.StringResponse;
 import com.example.demo.services.IBundleService;
@@ -22,9 +21,15 @@ public class BundleController {
         _bundleService = bundleService;
     }
 
-    @GetMapping()
-    public List<BundleResponse> getPublisherBundles(@RequestBody RequestId request){
-        return _bundleService.getPublisherBundles(request);
+    @GetMapping("/publisher")
+    public ResponseEntity<?> getPublisherBundles(@RequestParam("publisherId") Long publisherId, @RequestParam("simpleUser") boolean simpleUser){
+        List<BundleResponse> retVal = _bundleService.getPublisherBundles(publisherId, simpleUser);
+        if(retVal.isEmpty()){
+            StringResponse stringResponse = new StringResponse();
+            stringResponse.setText("There is no bundles.");
+            return new ResponseEntity<>(stringResponse, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
     @PostMapping()
@@ -39,4 +44,13 @@ public class BundleController {
         }
     }
 
+    @PutMapping("/approve")
+    public ResponseEntity<?> approveBundle(@RequestBody RequestId request){
+        return new ResponseEntity<>(_bundleService.approveBundle(request.getId()), HttpStatus.OK);
+    }
+
+    @PutMapping("/deny")
+    public ResponseEntity<?> denyBundle(@RequestBody RequestId request){
+        return new ResponseEntity<>(_bundleService.denyBundle(request.getId()), HttpStatus.OK);
+    }
 }

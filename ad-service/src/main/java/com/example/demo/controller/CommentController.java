@@ -1,16 +1,20 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.request.CreateCommentRequest;
+import com.example.demo.dto.request.RequestId;
 import com.example.demo.dto.response.CommentResponse;
+import com.example.demo.dto.response.TextResponse;
 import com.example.demo.services.ICommentService;
+import com.example.demo.util.RequestStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
-@RequestMapping("comments")
+@RequestMapping("/comments")
 public class CommentController {
 
     private final ICommentService _commentService;
@@ -19,25 +23,35 @@ public class CommentController {
         _commentService = commentService;
     }
 
-    @GetMapping()
-    public List<CommentResponse> getAllComments(){
-        return _commentService.getAllComments();
+    @GetMapping("/ad/{id}")
+    public List<CommentResponse> getAllCommentsByAd(@PathVariable("id") Long id){
+        return _commentService.getAllCommentsByAd(id);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getComment(@PathVariable("id") Long id){
-
-        CommentResponse commentResponse = _commentService.getAdById(id);
-        if(commentResponse != null){
-            return new ResponseEntity<>(commentResponse, HttpStatus.OK);
+    @GetMapping("/status")
+    public ResponseEntity<?> getAllCommentsByStatus(@PathParam("status") String status){
+        System.out.println(status);
+        List<CommentResponse> commentResponses = _commentService.getAllCommentsByStatus(status);
+        if(commentResponses.isEmpty()){
+            TextResponse textResponse = new TextResponse();
+            textResponse.setText("There is no comments.");
+            return new ResponseEntity<>(textResponse, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new ResponseEntity<>("Comment doesn't exist.", HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(commentResponses, HttpStatus.OK);
     }
 
     @PostMapping()
     public CommentResponse createComment(@RequestBody CreateCommentRequest request){
         return _commentService.createComment(request);
+    }
+
+    @PutMapping("/approve")
+    public CommentResponse approveComment(@RequestBody RequestId request){
+        return _commentService.approveComment(request.getId());
+    }
+
+    @PutMapping("/deny")
+    public CommentResponse denyComment(@RequestBody RequestId request){
+        return _commentService.denyComment(request.getId());
     }
 }

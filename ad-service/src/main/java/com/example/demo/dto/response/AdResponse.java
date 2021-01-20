@@ -1,6 +1,7 @@
 package com.example.demo.dto.response;
 
 import com.example.demo.dto.client.Agent;
+import com.example.demo.dto.client.Pricelist;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,5 +35,7 @@ public class AdResponse {
     private PublisherResponse publisher;
 
     private List<PictureResponse> pictures;
+
+    private Pricelist pricelist;
 
 }

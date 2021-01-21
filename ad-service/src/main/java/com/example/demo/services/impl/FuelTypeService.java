@@ -3,6 +3,7 @@ package com.example.demo.services.impl;
 import com.example.demo.dto.request.CreateFuelTypeRequest;
 import com.example.demo.dto.request.UpdateFuelTypeRequest;
 import com.example.demo.dto.response.FuelTypeResponse;
+import com.example.demo.dto.soap.CreateFuelTypeRequestSOAP;
 import com.example.demo.entity.FuelType;
 import com.example.demo.repository.IFuelTypeRepository;
 import com.example.demo.services.IFuelTypeService;
@@ -67,6 +68,15 @@ public class FuelTypeService implements IFuelTypeService {
         }
 
         return null;
+    }
+
+    @Override
+    public void createFuelTypeViaSOAP(CreateFuelTypeRequestSOAP request) {
+        FuelType fuelType = new FuelType();
+        fuelType.setType(request.getType());
+        fuelType.setTankCapacity(request.getTankCapacity());
+        FuelType savedFuelType = _fuelTypeRepository.save(fuelType);
+        System.out.println("Kreirao preko soap-a");
     }
 
     public FuelTypeResponse mapFuelTypetoFuelTypeResponse(FuelType fuelType) {

@@ -32,4 +32,6 @@ public class CreateAdRequest {
     private LocalDate creationDate;
 
     private boolean simpleUser;
+
+    private Long pricelistId;
 }

@@ -2,7 +2,7 @@ insert into bundle(id, publisher_id, status) values
 (1, 1, 'PENDING'), (2, 1, 'APPROVED'), (3, 1,'PENDING');
 
 insert into reservation (id, from_date, to_date, from_time, to_time, customer_id, ad_id, status, simple_user, bundle_id) values
-(1, '2021-01-15', '2021-01-18', '15:32', '12:33', 1, 1, 'DROPPED', true, null),
+(1, '2021-01-15', '2021-01-18', '15:32', '12:33', 1, 1, 'APPROVED', true, null),
 (2, '2021-01-13', '2021-01-15', '20:00', '20:00', 1, 5, 'DROPPED', true, null),
 (3, '2021-02-13', '2021-02-15', '20:00', '20:00', 1, 4, 'DROPPED', false, null),
 (4, '2021-02-16', '2021-02-19', '20:00', '20:00', 1, 1, 'APPROVED', true, null),

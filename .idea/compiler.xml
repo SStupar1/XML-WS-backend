@@ -10,14 +10,14 @@
         <module name="message-service" />
         <module name="zuul" />
         <module name="rent-service" />
-        <module name="ad-service" />
+        <module name="search-service" />
         <module name="eureka" />
         <module name="auth-service" />
-        <module name="search-service" />
+        <module name="ad-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ad-service" target="11" />
+      <module name="ad-service" target="8" />
       <module name="auth-service" target="11" />
       <module name="eureka" target="11" />
       <module name="message-service" target="1.8" />

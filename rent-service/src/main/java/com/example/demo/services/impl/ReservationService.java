@@ -3,11 +3,13 @@ package com.example.demo.services.impl;
 import com.example.demo.client.AdClient;
 import com.example.demo.dto.client.Ad;
 import com.example.demo.dto.request.ReservationRequest;
+import com.example.demo.dto.response.PriceResponse;
+import com.example.demo.dto.response.ReportResponse;
 import com.example.demo.dto.response.ReservationResponse;
-import com.example.demo.entity.Bundle;
 import com.example.demo.entity.Pricelist;
 import com.example.demo.entity.Reservation;
 import com.example.demo.repository.IBundleRepository;
+import com.example.demo.repository.IPricelistRepository;
 import com.example.demo.repository.IReservationRepository;
 import com.example.demo.services.IReservationService;
 import com.example.demo.util.enums.ReservationStatus;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +29,6 @@ public class ReservationService implements IReservationService {
     private final AdClient _adClient;
 
     private final IBundleRepository _bundleRepository;
-
 
     public ReservationService(IReservationRepository reservationRepository, AdClient adClient, IBundleRepository bundleRepository) {
         _reservationRepository = reservationRepository;
@@ -56,10 +58,8 @@ public class ReservationService implements IReservationService {
         List<Reservation> reservations = new ArrayList<>();
         List<Reservation> allReservations = _reservationRepository.findAllByStatus(ReservationStatus.PENDING);
         for(Reservation reservation: allReservations){
-            //ako rezervacija ne pripada bundleu
             if(reservation.getBundle() == null) {
                 Ad ad = _adClient.getAd(reservation.getAdId());
-                //provera publisher-a
                 if (ad.getPublisher().getId() == publisherId) {
                     if (simpleUser == ad.isSimpleUser()) {
                         reservations.add(reservation);
@@ -102,6 +102,74 @@ public class ReservationService implements IReservationService {
         _reservationRepository.save(reservation);
         return mapReservationToReservationResponse(reservation);
     }
+
+    @Override
+    public ReservationResponse createReservationByAgent(ReservationRequest request) {
+        Reservation reservation = new Reservation();
+        LocalDate fromDate = LocalDate.parse(request.getFromDateString());
+        LocalTime fromTime = LocalTime.parse(request.getFromTimeString());
+        LocalDate toDate = LocalDate.parse(request.getToDateString());
+        LocalTime toTime = LocalTime.parse(request.getToTimeString());
+        reservation.setCustomerId(request.getCustomerId());
+        reservation.setAdId(request.getAdId());
+        reservation.setFromDate(fromDate);
+        reservation.setToDate(toDate);
+        reservation.setFromTime(fromTime);
+        reservation.setToTime(toTime);
+        reservation.setStatus(ReservationStatus.APPROVED);
+        reservation.setSimpleUser(request.isSimpleUser());
+        Reservation savedReservation =_reservationRepository.save(reservation);
+        return mapReservationToReservationResponse(savedReservation);
+    }
+
+    @Override
+    public List<ReservationResponse> getAllApprovedPublisherReservations(Long publisherId, boolean simpleUser) {
+        List<Reservation> reservations = new ArrayList<>();
+        List<Reservation> allReservations = _reservationRepository.findAllByStatus(ReservationStatus.APPROVED);
+        for(Reservation reservation: allReservations){
+            if(reservation.getBundle() == null) {
+                Ad ad = _adClient.getAd(reservation.getAdId());
+                if (ad.getPublisher().getId() == publisherId) {
+                    if (simpleUser == ad.isSimpleUser()) {
+                        reservations.add(reservation);
+                    }
+                }
+            }
+        }
+        return mapReservationsToReservationResponses(reservations);
+    }
+
+    @Override
+    public ReportResponse generateReport(Long reservationId, double kmTraveled) {
+        Reservation reservation = _reservationRepository.findOneById(reservationId);
+        Ad ad = _adClient.getAd(reservation.getAdId());
+        LocalDate fromDate = reservation.getFromDate();
+        LocalDate toDate = reservation.getToDate();
+        long noOfDaysBetween = ChronoUnit.DAYS.between(fromDate, toDate);
+        //ako rentira za jedan dan noOfDaysBetween ce biti 0 zato odradimo ++
+        noOfDaysBetween++;
+
+        double price = 0;
+        if(ad.isCdw()){
+            price += ad.getPricelist().getPriceCdw();
+        }
+        price += noOfDaysBetween*ad.getPricelist().getPricePerDay();
+        if(ad.getPricelist().getDiscount().getDiscount()!=0){
+            price = (price*ad.getPricelist().getDiscount().getDiscount())/100;
+        }
+        if(kmTraveled!=0){
+            if(kmTraveled > ad.getLimitedKm()){
+                double razlika = kmTraveled - ad.getLimitedKm();
+                price += ad.getPricelist().getPricePerKilometer()*razlika;
+            }
+        }
+        ReportResponse reportResponse = new ReportResponse();
+        reportResponse.setPrice(price);
+        reportResponse.setAd(ad);
+
+        return reportResponse;
+    }
+
 
     @Override
     public ReservationResponse approveReservation(Long id) {

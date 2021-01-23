@@ -1,6 +1,7 @@
 package com.example.demo.dto.client;
 
-import jdk.jfr.SettingDefinition;
+//import jdk.jfr.SettingDefinition;
+import com.example.demo.dto.response.PricelistResponse;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,5 +21,5 @@ public class Ad {
     private Car car;
     private boolean simpleUser;
     private Publisher publisher;
-
+    private PricelistResponse pricelist;
 }

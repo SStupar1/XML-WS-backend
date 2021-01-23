@@ -39,5 +39,4 @@ public class PricelistController {
         return _pricelistService.createPricelist(request);
     }
 
-
 }

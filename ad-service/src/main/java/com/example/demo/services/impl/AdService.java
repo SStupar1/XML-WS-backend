@@ -79,6 +79,7 @@ public class AdService implements IAdService {
         ad.setSeats(request.getSeats());
         ad.setPublisher(request.getPublisherId());
         ad.setSimpleUser(request.isSimpleUser());
+        ad.setPricelistId(request.getPricelistId());
         List<Picture> pictures = new ArrayList<>();
         for (MultipartFile file : fileList) {
             Picture picture = new Picture();
@@ -90,9 +91,9 @@ public class AdService implements IAdService {
             _pictureRepository.save(picture);
         }
         ad.setAdPictures(pictures);
-        _adRepository.save(ad);
+        Ad savedAd = _adRepository.save(ad);
 
-        return mapAdToAdResponse(ad);
+        return mapAdToAdResponse(savedAd);
     }
 
     @Override

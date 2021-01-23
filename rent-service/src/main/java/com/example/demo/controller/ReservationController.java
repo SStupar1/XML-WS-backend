@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.request.RequestId;
 import com.example.demo.dto.request.ReservationRequest;
 import com.example.demo.dto.response.PricelistResponse;
+import com.example.demo.dto.response.ReportResponse;
 import com.example.demo.dto.response.ReservationResponse;
 import com.example.demo.dto.response.StringResponse;
 import com.example.demo.services.IReservationService;
@@ -41,6 +42,17 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/generate-report")
+    public ResponseEntity<?> generateReport(@RequestParam("reservationId") Long reservationId, @RequestParam("kmTraveled") double kmTraveled ){
+        ReportResponse reportResponse = _reservationService.generateReport(reservationId, kmTraveled);
+        if(reportResponse != null){
+            return new ResponseEntity<>(reportResponse, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("Report doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+    }
+
     //sve rezervacije koje pripadaju jednom autu/oglasu koje su na PENDING-u
     @GetMapping("/{id}/ad")
     public ResponseEntity<?> getAllAdReservations(@PathVariable Long id) {
@@ -53,7 +65,7 @@ public class ReservationController {
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
-    //rezervacije koje pripadaju useru(simple useru ili agentu)
+    //sve rezervacije koje je customer porucio koje ne pripadaju bundle paketu
     @GetMapping("/customer")
     public ResponseEntity<?> getAllCustomerReservations(@RequestParam("customerId") Long customerId, @RequestParam("simpleUser") boolean simpleUser){
         List<ReservationResponse> retVal = _reservationService.getAllCustomerReservations(customerId, simpleUser);
@@ -65,6 +77,7 @@ public class ReservationController {
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
+    //sve publisherove rezervacije sa statusom PENDING koje ne pripadaju bundle paketu
     @GetMapping("/publisher")
     public ResponseEntity<?> getAllPublisherReservations(@RequestParam("publisherId") Long publisherId, @RequestParam("simpleUser") boolean simpleUser){
         List<ReservationResponse> retVal = _reservationService.getAllPublisherReservations(publisherId, simpleUser);
@@ -76,9 +89,27 @@ public class ReservationController {
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
+    @GetMapping("/publisher/approved")
+    public ResponseEntity<?> getAllApprovedPublisherReservations(@RequestParam("publisherId") Long publisherId, @RequestParam("simpleUser") boolean simpleUser){
+        List<ReservationResponse> retVal = _reservationService.getAllApprovedPublisherReservations(publisherId, simpleUser);
+        if(retVal.isEmpty()){
+            StringResponse stringResponse = new StringResponse();
+            stringResponse.setText("There is no approved reservations.");
+            return new ResponseEntity<>(stringResponse, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(retVal, HttpStatus.OK);
+    }
+
+    //kreiranje rezervacije od strane customera
     @PostMapping()
     public ResponseEntity<?> createReservation(@RequestBody ReservationRequest reservationRequest){
         return new ResponseEntity<>(_reservationService.createReservation(reservationRequest), HttpStatus.OK);
+    }
+
+    //kreiranje rezervacije kada lice fizicki rentira vozilo od strane agenta
+    @PostMapping("/agent-create")
+    public ResponseEntity<?> createReservationByAgent(@RequestBody ReservationRequest request){
+        return new ResponseEntity<>(_reservationService.createReservationByAgent(request), HttpStatus.OK);
     }
 
     @PutMapping("/approve")
